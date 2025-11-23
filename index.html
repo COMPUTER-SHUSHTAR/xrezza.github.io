@@ -2,30 +2,30 @@
 <html lang="fa" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نکست لول | امپراطوری دیجیتال</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
+            /* متغیرهای تم تاریک */
             --bg: #050505;
             --card-bg: rgba(20, 20, 20, 0.6);
             --text: #ffffff;
-            --accent: #00f3ff;
-            --secondary: #bc13fe;
-            --danger: #ff0055;
+            --accent: #00f3ff; /* آبی نئونی */
+            --secondary: #bc13fe; /* بنفش */
             --border: rgba(255, 255, 255, 0.1);
             --shadow: 0 0 20px rgba(0, 243, 255, 0.2);
         }
 
         [data-theme="light"] {
+            /* متغیرهای تم روشن */
             --bg: #eef2f5;
             --card-bg: rgba(255, 255, 255, 0.7);
             --text: #1a1a2e;
             --accent: #2980b9;
             --secondary: #8e44ad;
-            --danger: #e74c3c;
             --border: rgba(0, 0, 0, 0.1);
             --shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
@@ -69,12 +69,18 @@
         }
         @keyframes rotateCursor { 100% { transform: rotate(360deg); } }
 
-        /* نوار اطلاعات */
+        /* نوار اطلاعات سیستم (بالا) */
         .sys-info-bar {
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
-            padding: 5px 20px; font-size: 0.75rem; color: #aaa;
-            display: flex; justify-content: space-between; border-bottom: 1px solid var(--border);
-            position: relative; z-index: 10;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            padding: 5px 20px;
+            font-size: 0.75rem;
+            color: #aaa;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            z-index: 10;
         }
         .info-item { margin-left: 15px; }
         .info-item i { margin-left: 5px; color: var(--accent); }
@@ -88,8 +94,8 @@
             box-shadow: var(--shadow); cursor: none;
         }
 
-        /* پس زمینه ذرات */
-        #bgCanvas { position: fixed; top: 0; left: 0; z-index: 0; }
+        /* پس زمینه متحرک */
+        canvas { position: fixed; top: 0; left: 0; z-index: 0; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
 
@@ -109,6 +115,328 @@
 
         /* کارت‌ها */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 30px; border-radius: 20px; text-align: center;
+            backdrop-filter: blur(15px); transition: 0.4s;
+            transform-style: preserve-3d;
+        }
+        .card:hover { transform: translateY(-10px) rotateX(5deg); border-color: var(--accent); }
+        .card-icon { font-size: 4rem; margin-bottom: 20px; background: linear-gradient(45deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* دکمه‌ها */
+        .btn {
+            padding: 12px 30px; border-radius: 50px; border: none;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            color: white; font-weight: bold; font-size: 1rem; margin-top: 15px;
+            display: inline-block; cursor: none; transition: 0.3s;
+        }
+        .btn:hover { box-shadow: 0 0 20px var(--accent); letter-spacing: 1px; }
+
+        /* بخش تاریخچه */
+        .history-box {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 20px; padding: 30px; margin-bottom: 50px;
+            border-right: 4px solid var(--secondary);
+        }
+        .history-title { display: flex; align-items: center; margin-bottom: 15px; font-size: 1.5rem; }
+        .history-content { line-height: 1.8; opacity: 0.8; font-size: 0.95rem; text-align: justify; }
+
+        /* بخش سرگرمی (گیم) */
+        .game-section {
+            background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(20,20,20,0.9));
+            border: 2px solid var(--accent); border-radius: 20px;
+            padding: 30px; text-align: center; margin-bottom: 60px;
+            position: relative; overflow: hidden;
+        }
+        .game-score { font-size: 2.5rem; font-family: monospace; color: var(--accent); margin: 20px 0; }
+        .clicker-btn {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: var(--secondary); border: 5px solid white;
+            font-size: 2rem; color: white; cursor: none;
+            transition: 0.1s;
+        }
+        .clicker-btn:active { transform: scale(0.9); }
+
+        /* فرم سفارش */
+        .order-zone {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 30px; padding: 40px; max-width: 700px; margin: 0 auto;
+        }
+        .inp {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+            padding: 15px; color: var(--text); border-radius: 10px; margin-bottom: 20px; outline: none;
+        }
+        .inp:focus { border-color: var(--accent); }
+
+        footer { text-align: center; margin-top: 50px; padding: 30px; border-top: 1px solid var(--border); color: #777; }
+        .reza { color: var(--accent); font-weight: bold; text-transform: uppercase; }
+
+        /* موبایل */
+        @media(max-width: 768px) { .cursor, .cursor-dot { display: none; } * { cursor: auto; } }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <h2 style="color:white; letter-spacing:3px;">INITIALIZING SYSTEM...</h2>
+        <div class="loader-bar"><div class="loader-progress"></div></div>
+    </div>
+
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    <canvas id="canvas"></canvas>
+    
+    <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
+
+    <div class="sys-info-bar">
+        <div id="sys-clock">--:--:--</div>
+        <div style="display:flex;">
+            <div class="info-item" id="user-ip"><i class="fas fa-network-wired"></i> در حال شناسایی...</div>
+            <div class="info-item" id="user-device"><i class="fas fa-laptop-code"></i> دستگاه شما</div>
+            <div class="info-item" id="battery-stat"><i class="fas fa-battery-half"></i> --%</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="glitch-text">NEXT LEVEL SHOP</div>
+            <p style="color: var(--accent); margin-top:10px;">خرید استارز و تون با تکنولوژی آینده</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-star"></i></div>
+                <h3>Telegram Stars</h3>
+                <p>شارژ آنی برای ربات‌ها</p>
+                <button onclick="scrollToOrder('Stars')" class="btn">خرید استارز</button>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-gem"></i></div>
+                <h3>TON Coin</h3>
+                <p>انتقال مستقیم به والت</p>
+                <button onclick="scrollToOrder('TON')" class="btn">خرید تون</button>
+            </div>
+        </div>
+
+        <div class="history-box">
+            <div class="history-title"><i class="fas fa-history"></i>&nbsp; تاریخچه استارز و تون</div>
+            <p class="history-content">
+                در سال 2018، پاول دوروف پروژه شبکه باز (TON) را آغاز کرد. هدف، ایجاد یک اینترنت غیرمتمرکز بود. پس از فراز و نشیب‌ها، اکنون TON سریع‌ترین بلاکچین جهان است.<br><br>
+                <b>استارز (Stars):</b> واحد پول جدید اکوسیستم تلگرام که در سال 2024 معرفی شد تا پرداخت‌های دیجیتال را برای کالاهای مجازی آسان کند. این ارز پلی میان دنیای فیات و کریپتو است.
+            </p>
+        </div>
+
+        <div class="game-section">
+            <h3 style="color:white; margin-bottom:10px;">🎮 استخراج‌کننده کریپتو (سرگرمی)</h3>
+            <p style="color:#aaa; font-size:0.8rem;">کلیک کنید تا کوین جمع کنید!</p>
+            <div class="game-score" id="score">0</div>
+            <button class="clicker-btn" onmousedown="mineCrypto()"><i class="fas fa-hammer"></i></button>
+            <div style="margin-top:20px; font-size:0.9rem; color: var(--accent);">
+                رکورد شما: <span id="highscore">0</span>
+            </div>
+        </div>
+
+        <section id="order-zone" class="order-zone">
+            <h2 style="text-align:center; margin-bottom:30px;"><i class="fas fa-shopping-cart"></i> ثبت سفارش نهایی</h2>
+            
+            <select id="p-type" class="inp">
+                <option value="Stars">استارز (Telegram Stars)</option>
+                <option value="TON">تون کوین (TON)</option>
+            </select>
+            <input type="text" id="p-amount" class="inp" placeholder="تعداد (مثلا: 1000 استارز)">
+            <input type="text" id="p-id" class="inp" placeholder="آیدی تلگرام شما (@username)" dir="ltr" style="text-align:left;">
+            
+            <button onclick="submitOrder()" class="btn" style="width:100%;">دریافت کد رهگیری و پرداخت</button>
+        </section>
+
+        <footer>
+            <p>DESIGNED BY <span class="reza">REZA</span> | 2025</p>
+            <p style="font-size:0.8rem; margin-top:5px;">IP شما جهت امنیت لاگ می‌شود.</p>
+        </footer>
+    </div>
+
+    <script>
+        const ADMIN_ID = "justfor_everyone";
+
+        // 1. لودر
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
+            }, 2000);
+        }
+
+        // 2. تم (Dark/Light)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+            initParticles(); // ریست کردن رنگ ذرات
+        }
+
+        // 3. اطلاعات سیستم و ساعت
+        function updateSystemInfo() {
+            // ساعت
+            const now = new Date();
+            document.getElementById('sys-clock').innerText = now.toLocaleTimeString('fa-IR');
+
+            // اطلاعات دستگاه
+            const ua = navigator.userAgent;
+            let device = "Desktop";
+            if(/Android|iPhone/i.test(ua)) device = "Mobile";
+            document.getElementById('user-device').innerHTML = `<i class="fas fa-${device === 'Mobile' ? 'mobile-alt' : 'desktop'}"></i> ${device}`;
+
+            // باتری (اگر پشتیبانی شود)
+            if(navigator.getBattery) {
+                navigator.getBattery().then(batt => {
+                    document.getElementById('battery-stat').innerHTML = `<i class="fas fa-battery-half"></i> ${Math.round(batt.level * 100)}%`;
+                });
+            }
+
+            // IP (فیک برای نمایش چون api واقعی ممکنه بلاک بشه)
+            // در واقعیت برای گرفتن IP نیاز به سرور یا API خارجی دارید
+            // اینجا برای زیبایی یک IP رندوم جنریت میکنیم که حس خفن بده
+            if(document.getElementById('user-ip').innerText.includes('شناسایی')) {
+                fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('user-ip').innerHTML = `<i class="fas fa-globe"></i> ${data.ip}`;
+                })
+                .catch(() => {
+                    document.getElementById('user-ip').innerHTML = `<i class="fas fa-user-secret"></i> Hidden`;
+                });
+            }
+        }
+        setInterval(updateSystemInfo, 1000);
+
+        // 4. مینی گیم (Crypto Clicker)
+        let score = 0;
+        let highscore = 0;
+        function mineCrypto() {
+            score++;
+            document.getElementById('score').innerText = score;
+            if(score > highscore) {
+                highscore = score;
+                document.getElementById('highscore').innerText = highscore;
+            }
+            // افکت ویبره برای دکمه
+            const btn = document.querySelector('.clicker-btn');
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 50);
+        }
+
+        // 5. کرسر موس
+        const cursor = document.querySelector('.cursor');
+        const dot = document.querySelector('.cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            cursor.style.left = (e.clientX - 15) + 'px';
+            cursor.style.top = (e.clientY - 15) + 'px';
+        });
+
+        // 6. اسکرول به سفارش
+        function scrollToOrder(type) {
+            document.getElementById('p-type').value = type;
+            document.getElementById('order-zone').scrollIntoView({behavior: 'smooth'});
+        }
+
+        // 7. ثبت سفارش (اصلی)
+        function submitOrder() {
+            const type = document.getElementById('p-type').value;
+            const amount = document.getElementById('p-amount').value;
+            const uid = document.getElementById('p-id').value;
+
+            if(!amount || !uid) { alert('لطفا اطلاعات را کامل کنید'); return; }
+
+            const orderCode = 'R-' + Math.floor(Math.random() * 100000);
+            
+            const msg = `
+🚨 *سفارش جدید*
+----------------
+🔖 کد: \`${orderCode}\`
+📦 محصول: ${type}
+💰 مقدار: ${amount}
+👤 کاربر: ${uid}
+----------------
+لطفا شماره کارت را ارسال کنید تا فیش را بفرستم.`;
+
+            window.open(`https://t.me/${ADMIN_ID}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // 8. ذرات پس‌زمینه (Canvas)
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let particlesArray;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, size, speedX, speedY) {
+                this.x = x; this.y = y; this.size = size;
+                this.speedX = speedX; this.speedY = speedY;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+            }
+            draw() {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                ctx.fillStyle = isDark ? '#00f3ff' : '#2980b9';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < 50; i++) {
+                let size = Math.random() * 2 + 1;
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                let speedX = (Math.random() * 1) - 0.5;
+                let speedY = (Math.random() * 1) - 0.5;
+                particlesArray.push(new Particle(x, y, size, speedX, speedY));
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                // خطوط اتصال
+                for (let j = i; j < particlesArray.length; j++) {
+                    const dx = particlesArray[i].x - particlesArray[j].x;
+                    const dy = particlesArray[i].y - particlesArray[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                        ctx.strokeStyle = isDark ? `rgba(0, 243, 255, ${1 - distance/150})` : `rgba(41, 128, 185, ${1 - distance/150})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+    </script>
+</body>
+</html>
         .card {
             background: var(--card-bg); border: 1px solid var(--border);
             padding: 30px; border-radius: 20px; text-align: center;
