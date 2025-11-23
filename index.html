@@ -3,809 +3,403 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نکست لول | امپراطوری دیجیتال</title>
+    <title>نکست لول | خرید ارز دیجیتال</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* تنظیمات رنگ‌ها و متغیرها */
         :root {
-            /* متغیرهای تم تاریک */
-            --bg: #050505;
-            --card-bg: rgba(20, 20, 20, 0.6);
-            --text: #ffffff;
-            --accent: #00f3ff; /* آبی نئونی */
-            --secondary: #bc13fe; /* بنفش */
+            --bg-color: #030305;
+            --card-bg: rgba(20, 20, 25, 0.6);
+            --text-main: #ffffff;
+            --text-sec: #aaaaaa;
+            --accent: #00f2ea; /* فیروزه‌ای نئونی */
+            --accent-glow: rgba(0, 242, 234, 0.5);
+            --primary: #4e4eff;
             --border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            --gradient: linear-gradient(135deg, #00f2ea 0%, #4e4eff 100%);
+            --grid-color: rgba(255, 255, 255, 0.03);
         }
 
+        /* حالت لایت مود */
         [data-theme="light"] {
-            /* متغیرهای تم روشن */
-            --bg: #eef2f5;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --text: #1a1a2e;
-            --accent: #2980b9;
-            --secondary: #8e44ad;
+            --bg-color: #f4f7f6;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-main: #1a1a2e;
+            --text-sec: #666666;
+            --accent: #246bfd;
+            --accent-glow: rgba(36, 107, 253, 0.3);
+            --primary: #6c5ce7;
             --border: rgba(0, 0, 0, 0.1);
-            --shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, #246bfd 0%, #6c5ce7 100%);
+            --grid-color: rgba(0, 0, 0, 0.03);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; transition: background 0.3s, color 0.3s; }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             min-height: 100vh;
-            transition: 0.5s;
-        }
-
-        /* لودینگ */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 1s;
-        }
-        .loader-bar {
-            width: 200px; height: 3px; background: #333; margin-top: 20px;
-            position: relative; overflow: hidden;
-        }
-        .loader-progress {
-            position: absolute; top: 0; left: 0; height: 100%; width: 0%;
-            background: var(--accent); animation: load 2s ease forwards;
-        }
-        @keyframes load { 100% { width: 100%; } }
-
-        /* کرسر موس */
-        .cursor {
-            width: 30px; height: 30px; border: 1px dashed var(--accent); border-radius: 50%;
-            position: fixed; pointer-events: none; z-index: 10000; transition: transform 0.1s;
-            animation: rotateCursor 4s infinite linear;
-        }
-        .cursor-dot {
-            width: 6px; height: 6px; background: var(--secondary); border-radius: 50%;
-            position: fixed; pointer-events: none; z-index: 10001;
-        }
-        @keyframes rotateCursor { 100% { transform: rotate(360deg); } }
-
-        /* نوار اطلاعات سیستم (بالا) */
-        .sys-info-bar {
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            padding: 5px 20px;
-            font-size: 0.75rem;
-            color: #aaa;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border);
+            overflow-x: hidden;
             position: relative;
-            z-index: 10;
-        }
-        .info-item { margin-left: 15px; }
-        .info-item i { margin-left: 5px; color: var(--accent); }
-
-        /* دکمه تم */
-        .theme-btn {
-            position: fixed; top: 80px; left: 20px; z-index: 100;
-            width: 40px; height: 40px; border-radius: 50%;
-            background: var(--card-bg); border: 1px solid var(--border);
-            color: var(--text); display: flex; justify-content: center; align-items: center;
-            box-shadow: var(--shadow); cursor: none;
         }
 
-        /* پس زمینه متحرک */
-        canvas { position: fixed; top: 0; left: 0; z-index: 0; }
+        /* پس‌زمینه شبکه‌ای متحرک */
+        .cyber-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            perspective: 500px;
+            transform-style: preserve-3d;
+            animation: moveGrid 20s linear infinite;
+        }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
+        @keyframes moveGrid { 0% { background-position: 0 0; } 100% { background-position: 0 40px; } }
+
+        /* دکمه تغییر تم */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 0 15px var(--accent-glow);
+            font-size: 1.2rem;
+            color: var(--text-main);
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+
+        /* نوار آمار */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-sec);
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .stat-item i { color: var(--accent); margin-left: 5px; }
 
         /* هدر */
-        header { text-align: center; padding: 60px 0; }
-        .glitch-text {
-            font-size: 3.5rem; font-weight: 900; position: relative;
-            text-shadow: 2px 2px var(--secondary);
-            animation: glitch 3s infinite;
+        header { text-align: center; margin-bottom: 60px; position: relative; }
+        .logo { 
+            font-size: 3.5rem; 
+            font-weight: 900; 
+            background: var(--gradient); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            display: inline-block;
         }
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            2% { transform: translate(-2px, 2px); }
-            4% { transform: translate(2px, -2px); }
-            6% { transform: translate(0); }
+        .subtitle { color: var(--text-sec); font-size: 1.1rem; }
+
+        /* محصولات */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
         }
 
-        /* کارت‌ها */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px; }
         .card {
-            background: var(--card-bg); border: 1px solid var(--border);
-            padding: 30px; border-radius: 20px; text-align: center;
-            backdrop-filter: blur(15px); transition: 0.4s;
-            transform-style: preserve-3d;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(12px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .card:hover { transform: translateY(-10px) rotateX(5deg); border-color: var(--accent); }
-        .card-icon { font-size: 4rem; margin-bottom: 20px; background: linear-gradient(45deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* دکمه‌ها */
-        .btn {
-            padding: 12px 30px; border-radius: 50px; border: none;
-            background: linear-gradient(90deg, var(--accent), var(--secondary));
-            color: white; font-weight: bold; font-size: 1rem; margin-top: 15px;
-            display: inline-block; cursor: none; transition: 0.3s;
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px var(--accent-glow);
         }
-        .btn:hover { box-shadow: 0 0 20px var(--accent); letter-spacing: 1px; }
 
-        /* بخش تاریخچه */
-        .history-box {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 20px; padding: 30px; margin-bottom: 50px;
-            border-right: 4px solid var(--secondary);
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
         }
-        .history-title { display: flex; align-items: center; margin-bottom: 15px; font-size: 1.5rem; }
-        .history-content { line-height: 1.8; opacity: 0.8; font-size: 0.95rem; text-align: justify; }
 
-        /* بخش سرگرمی (گیم) */
-        .game-section {
-            background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(20,20,20,0.9));
-            border: 2px solid var(--accent); border-radius: 20px;
-            padding: 30px; text-align: center; margin-bottom: 60px;
-            position: relative; overflow: hidden;
+        .card h3 { font-size: 1.8rem; margin-bottom: 10px; }
+        .card p { color: var(--text-sec); margin-bottom: 20px; font-size: 0.9rem; }
+        
+        .badge {
+            background: rgba(255, 50, 50, 0.1);
+            color: #ff4757;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            display: inline-block;
+            margin-bottom: 20px;
         }
-        .game-score { font-size: 2.5rem; font-family: monospace; color: var(--accent); margin: 20px 0; }
-        .clicker-btn {
-            width: 100px; height: 100px; border-radius: 50%;
-            background: var(--secondary); border: 5px solid white;
-            font-size: 2rem; color: white; cursor: none;
-            transition: 0.1s;
-        }
-        .clicker-btn:active { transform: scale(0.9); }
 
-        /* فرم سفارش */
-        .order-zone {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 30px; padding: 40px; max-width: 700px; margin: 0 auto;
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
         }
-        .inp {
-            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-            padding: 15px; color: var(--text); border-radius: 10px; margin-bottom: 20px; outline: none;
+        
+        .btn-action::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
         }
-        .inp:focus { border-color: var(--accent); }
+        
+        .btn-action:hover::before { left: 100%; }
 
-        footer { text-align: center; margin-top: 50px; padding: 30px; border-top: 1px solid var(--border); color: #777; }
-        .reza { color: var(--accent); font-weight: bold; text-transform: uppercase; }
+        /* فرم سفارش پیشرفته */
+        .order-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(15px);
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .order-panel::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            z-index: -1;
+            border-radius: 26px;
+            background: var(--gradient);
+            opacity: 0.3;
+            filter: blur(10px);
+        }
 
-        /* موبایل */
-        @media(max-width: 768px) { .cursor, .cursor-dot { display: none; } * { cursor: auto; } }
+        .input-group { margin-bottom: 20px; text-align: right; }
+        .input-group label { display: block; margin-bottom: 8px; color: var(--text-sec); font-size: 0.9rem; }
+        
+        .custom-input {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+        }
+        .custom-input:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            color: var(--text-sec);
+            font-size: 0.9rem;
+        }
+
+        .designer { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* پاپ آپ */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-color);
+            border: 1px solid var(--accent);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 2000;
+            white-space: nowrap;
+        }
+
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <h2 style="color:white; letter-spacing:3px;">INITIALIZING SYSTEM...</h2>
-        <div class="loader-bar"><div class="loader-progress"></div></div>
-    </div>
+    <div class="cyber-grid"></div>
 
-    <div class="cursor"></div>
-    <div class="cursor-dot"></div>
-    <canvas id="canvas"></canvas>
-    
-    <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
-
-    <div class="sys-info-bar">
-        <div id="sys-clock">--:--:--</div>
-        <div style="display:flex;">
-            <div class="info-item" id="user-ip"><i class="fas fa-network-wired"></i> در حال شناسایی...</div>
-            <div class="info-item" id="user-device"><i class="fas fa-laptop-code"></i> دستگاه شما</div>
-            <div class="info-item" id="battery-stat"><i class="fas fa-battery-half"></i> --%</div>
-        </div>
-    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
 
     <div class="container">
+        <div class="stats-bar">
+            <div class="stat-item"><i class="fas fa-globe"></i> وضعیت: آنلاین</div>
+            <div class="stat-item" id="time-display"><i class="far fa-clock"></i> ساعت: --:--</div>
+            <div class="stat-item"><i class="fas fa-users"></i> کاربران: <span id="users-count">32</span></div>
+        </div>
+
         <header>
-            <div class="glitch-text">NEXT LEVEL SHOP</div>
-            <p style="color: var(--accent); margin-top:10px;">خرید استارز و تون با تکنولوژی آینده</p>
+            <div class="logo">NEXT<span style="color:var(--accent)">SHOP</span></div>
+            <p class="subtitle">نسل جدید خرید ارزهای تلگرام | بدون واسطه</p>
         </header>
 
-        <div class="grid">
+        [attachment_0](attachment)
+
+        <div class="products-grid">
             <div class="card">
                 <div class="card-icon"><i class="fas fa-star"></i></div>
-                <h3>Telegram Stars</h3>
-                <p>شارژ آنی برای ربات‌ها</p>
-                <button onclick="scrollToOrder('Stars')" class="btn">خرید استارز</button>
+                <h3>Stars تلگرام</h3>
+                <span class="badge">تحویل فوری</span>
+                <p>مخصوص ربات‌ها و پرداخت‌های درون برنامه‌ای</p>
+                <button onclick="scrollToOrder('Stars')" class="btn-action">ثبت سفارش</button>
             </div>
+
             <div class="card">
                 <div class="card-icon"><i class="fas fa-gem"></i></div>
                 <h3>TON Coin</h3>
-                <p>انتقال مستقیم به والت</p>
-                <button onclick="scrollToOrder('TON')" class="btn">خرید تون</button>
+                <span class="badge">نرخ لحظه‌ای</span>
+                <p>به دلیل نوسان بازار، قیمت در پی‌وی نهایی می‌شود</p>
+                <button onclick="scrollToOrder('TON')" class="btn-action">ثبت سفارش</button>
             </div>
         </div>
 
-        <div class="history-box">
-            <div class="history-title"><i class="fas fa-history"></i>&nbsp; تاریخچه استارز و تون</div>
-            <p class="history-content">
-                در سال 2018، پاول دوروف پروژه شبکه باز (TON) را آغاز کرد. هدف، ایجاد یک اینترنت غیرمتمرکز بود. پس از فراز و نشیب‌ها، اکنون TON سریع‌ترین بلاکچین جهان است.<br><br>
-                <b>استارز (Stars):</b> واحد پول جدید اکوسیستم تلگرام که در سال 2024 معرفی شد تا پرداخت‌های دیجیتال را برای کالاهای مجازی آسان کند. این ارز پلی میان دنیای فیات و کریپتو است.
-            </p>
-        </div>
-
-        <div class="game-section">
-            <h3 style="color:white; margin-bottom:10px;">🎮 استخراج‌کننده کریپتو (سرگرمی)</h3>
-            <p style="color:#aaa; font-size:0.8rem;">کلیک کنید تا کوین جمع کنید!</p>
-            <div class="game-score" id="score">0</div>
-            <button class="clicker-btn" onmousedown="mineCrypto()"><i class="fas fa-hammer"></i></button>
-            <div style="margin-top:20px; font-size:0.9rem; color: var(--accent);">
-                رکورد شما: <span id="highscore">0</span>
+        <section id="order-section" class="order-panel">
+            <h2 style="text-align: center; margin-bottom: 30px;">تکمیل سفارش</h2>
+            
+            <div class="input-group">
+                <label>نوع ارز</label>
+                <select id="order-type" class="custom-input" style="background: var(--bg-color);">
+                    <option value="Stars">استارز (Stars)</option>
+                    <option value="TON">تون کوین (TON)</option>
+                </select>
             </div>
-        </div>
 
-        <section id="order-zone" class="order-zone">
-            <h2 style="text-align:center; margin-bottom:30px;"><i class="fas fa-shopping-cart"></i> ثبت سفارش نهایی</h2>
-            
-            <select id="p-type" class="inp">
-                <option value="Stars">استارز (Telegram Stars)</option>
-                <option value="TON">تون کوین (TON)</option>
-            </select>
-            <input type="text" id="p-amount" class="inp" placeholder="تعداد (مثلا: 1000 استارز)">
-            <input type="text" id="p-id" class="inp" placeholder="آیدی تلگرام شما (@username)" dir="ltr" style="text-align:left;">
-            
-            <button onclick="submitOrder()" class="btn" style="width:100%;">دریافت کد رهگیری و پرداخت</button>
+            <div class="input-group">
+                <label>تعداد مورد نیاز</label>
+                <input type="text" id="order-amount" class="custom-input" placeholder="مثلا: 10 تون یا 500 استارز">
+            </div>
+
+            <div class="input-group">
+                <label>آیدی تلگرام شما (جهت تماس ما)</label>
+                <input type="text" id="user-id" class="custom-input" placeholder="@username" dir="ltr" style="text-align: left;">
+            </div>
+
+            <button onclick="submitOrder()" class="btn-action">دریافت کد رهگیری و ارسال</button>
         </section>
 
         <footer>
-            <p>DESIGNED BY <span class="reza">REZA</span> | 2025</p>
-            <p style="font-size:0.8rem; margin-top:5px;">IP شما جهت امنیت لاگ می‌شود.</p>
+            <p>تمامی حقوق محفوظ است © 2025</p>
+            <p>DESIGNED BY <span class="designer">REZA</span></p>
         </footer>
     </div>
 
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle" style="color: var(--accent);"></i> کد سفارش شما کپی شد!
+    </div>
+
     <script>
-        const ADMIN_ID = "justfor_everyone";
+        const ADMIN_ID = "justfor_everyone"; // آیدی خودت
 
-        // 1. لودر
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
-            }, 2000);
-        }
-
-        // 2. تم (Dark/Light)
+        // 1. تغییر تم (Dark/Light)
         function toggleTheme() {
             const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-            initParticles(); // ریست کردن رنگ ذرات
-        }
-
-        // 3. اطلاعات سیستم و ساعت
-        function updateSystemInfo() {
-            // ساعت
-            const now = new Date();
-            document.getElementById('sys-clock').innerText = now.toLocaleTimeString('fa-IR');
-
-            // اطلاعات دستگاه
-            const ua = navigator.userAgent;
-            let device = "Desktop";
-            if(/Android|iPhone/i.test(ua)) device = "Mobile";
-            document.getElementById('user-device').innerHTML = `<i class="fas fa-${device === 'Mobile' ? 'mobile-alt' : 'desktop'}"></i> ${device}`;
-
-            // باتری (اگر پشتیبانی شود)
-            if(navigator.getBattery) {
-                navigator.getBattery().then(batt => {
-                    document.getElementById('battery-stat').innerHTML = `<i class="fas fa-battery-half"></i> ${Math.round(batt.level * 100)}%`;
-                });
-            }
-
-            // IP (فیک برای نمایش چون api واقعی ممکنه بلاک بشه)
-            // در واقعیت برای گرفتن IP نیاز به سرور یا API خارجی دارید
-            // اینجا برای زیبایی یک IP رندوم جنریت میکنیم که حس خفن بده
-            if(document.getElementById('user-ip').innerText.includes('شناسایی')) {
-                fetch('https://api.ipify.org?format=json')
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('user-ip').innerHTML = `<i class="fas fa-globe"></i> ${data.ip}`;
-                })
-                .catch(() => {
-                    document.getElementById('user-ip').innerHTML = `<i class="fas fa-user-secret"></i> Hidden`;
-                });
-            }
-        }
-        setInterval(updateSystemInfo, 1000);
-
-        // 4. مینی گیم (Crypto Clicker)
-        let score = 0;
-        let highscore = 0;
-        function mineCrypto() {
-            score++;
-            document.getElementById('score').innerText = score;
-            if(score > highscore) {
-                highscore = score;
-                document.getElementById('highscore').innerText = highscore;
-            }
-            // افکت ویبره برای دکمه
-            const btn = document.querySelector('.clicker-btn');
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => btn.style.transform = 'scale(1)', 50);
-        }
-
-        // 5. کرسر موس
-        const cursor = document.querySelector('.cursor');
-        const dot = document.querySelector('.cursor-dot');
-        document.addEventListener('mousemove', (e) => {
-            dot.style.left = e.clientX + 'px';
-            dot.style.top = e.clientY + 'px';
-            cursor.style.left = (e.clientX - 15) + 'px';
-            cursor.style.top = (e.clientY - 15) + 'px';
-        });
-
-        // 6. اسکرول به سفارش
-        function scrollToOrder(type) {
-            document.getElementById('p-type').value = type;
-            document.getElementById('order-zone').scrollIntoView({behavior: 'smooth'});
-        }
-
-        // 7. ثبت سفارش (اصلی)
-        function submitOrder() {
-            const type = document.getElementById('p-type').value;
-            const amount = document.getElementById('p-amount').value;
-            const uid = document.getElementById('p-id').value;
-
-            if(!amount || !uid) { alert('لطفا اطلاعات را کامل کنید'); return; }
-
-            const orderCode = 'R-' + Math.floor(Math.random() * 100000);
+            const icon = document.getElementById('theme-icon');
             
-            const msg = `
-🚨 *سفارش جدید*
-----------------
-🔖 کد: \`${orderCode}\`
-📦 محصول: ${type}
-💰 مقدار: ${amount}
-👤 کاربر: ${uid}
-----------------
-لطفا شماره کارت را ارسال کنید تا فیش را بفرستم.`;
-
-            window.open(`https://t.me/${ADMIN_ID}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        // 8. ذرات پس‌زمینه (Canvas)
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-        let particlesArray;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
-        resizeCanvas();
-
-        class Particle {
-            constructor(x, y, size, speedX, speedY) {
-                this.x = x; this.y = y; this.size = size;
-                this.speedX = speedX; this.speedY = speedY;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
-                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
-            }
-            draw() {
-                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-                ctx.fillStyle = isDark ? '#00f3ff' : '#2980b9';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-sun';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-moon';
             }
         }
 
-        function initParticles() {
-            particlesArray = [];
-            for (let i = 0; i < 50; i++) {
-                let size = Math.random() * 2 + 1;
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                let speedX = (Math.random() * 1) - 0.5;
-                let speedY = (Math.random() * 1) - 0.5;
-                particlesArray.push(new Particle(x, y, size, speedX, speedY));
-            }
+        // 2. اسکرول نرم به فرم
+        function scrollToOrder(type) {
+            document.getElementById('order-type').value = type;
+            document.getElementById('order-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-                // خطوط اتصال
-                for (let j = i; j < particlesArray.length; j++) {
-                    const dx = particlesArray[i].x - particlesArray[j].x;
-                    const dy = particlesArray[i].y - particlesArray[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < 150) {
-                        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-                        ctx.strokeStyle = isDark ? `rgba(0, 243, 255, ${1 - distance/150})` : `rgba(41, 128, 185, ${1 - distance/150})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
-                        ctx.stroke();
-                    }
-                }
+        // 3. سیستم ثبت سفارش و تولید کد
+        function submitOrder() {
+            const type = document.getElementById('order-type').value;
+            const amount = document.getElementById('order-amount').value;
+            const user = document.getElementById('user-id').value;
+
+            if (!amount || !user) {
+                alert("لطفا تعداد و آیدی خود را وارد کنید!");
+                return;
             }
-            requestAnimationFrame(animateParticles);
+
+            // تولید کد سفارش رندوم و خفن
+            const orderID = '#ORD-' + Math.floor(Math.random() * 9000 + 1000);
+
+            // نمایش پیام کوتاه (Toast)
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+
+            // ساخت متن پیام برای ارسال به تلگرام
+            const message = `
+🚀 *سفارش جدید سایت* ---------------------------
+🆔 کد رهگیری: \`${orderID}\`
+💎 محصول: ${type}
+🔢 تعداد: ${amount}
+👤 کاربر: ${user}
+---------------------------
+لطفا قیمت نهایی و شماره کارت را ارسال کنید.
+            `;
+
+            // باز کردن تلگرام
+            setTimeout(() => {
+                const url = `https://t.me/${ADMIN_ID}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            }, 1000); // یک ثانیه تاخیر برای دیده شدن افکت
         }
 
-        initParticles();
-        animateParticles();
+        // 4. ساعت زنده
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('time-display').innerHTML = 
+                `<i class="far fa-clock"></i> تهران: ${now.toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'})}`;
+        }, 1000);
+
+        // 5. تغییر تصادفی تعداد کاربران برای حس زنده بودن
+        setInterval(() => {
+            const count = Math.floor(Math.random() * (45 - 20) + 20);
+            document.getElementById('users-count').innerText = count.toLocaleString('fa-IR');
+        }, 8000);
+
     </script>
 </body>
 </html>
-        .card {
-            background: var(--card-bg); border: 1px solid var(--border);
-            padding: 30px; border-radius: 20px; text-align: center;
-            backdrop-filter: blur(15px); transition: 0.4s;
-            transform-style: preserve-3d;
-        }
-        .card:hover { transform: translateY(-10px) rotateX(5deg); border-color: var(--accent); }
-        .card-icon { font-size: 4rem; margin-bottom: 20px; background: linear-gradient(45deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .btn {
-            padding: 12px 30px; border-radius: 50px; border: none;
-            background: linear-gradient(90deg, var(--accent), var(--secondary));
-            color: white; font-weight: bold; font-size: 1rem; margin-top: 15px;
-            display: inline-block; cursor: none; transition: 0.3s;
-        }
-        .btn:hover { box-shadow: 0 0 20px var(--accent); letter-spacing: 1px; }
-
-        /* --- استایل جدید بازی --- */
-        .game-wrapper {
-            background: #000;
-            border: 2px solid var(--accent);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 60px;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
-        }
-        
-        canvas#gameCanvas {
-            display: block;
-            width: 100%;
-            height: 400px;
-            background: radial-gradient(circle at bottom, #1a0b2e 0%, #000 100%);
-            cursor: none;
-            touch-action: none; /* جلوگیری از اسکرول موبایل */
-        }
-
-        .game-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.8); z-index: 5;
-        }
-
-        .game-stats {
-            position: absolute; top: 10px; left: 10px; right: 10px;
-            display: flex; justify-content: space-between;
-            color: white; font-family: monospace; font-size: 1.2rem;
-            z-index: 4; pointer-events: none;
-        }
-
-        .btn-play {
-            padding: 15px 40px; font-size: 1.5rem; background: var(--secondary);
-            color: white; border: none; border-radius: 10px; cursor: none;
-            animation: pulseBtn 1s infinite;
-        }
-        @keyframes pulseBtn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-
-        /* تاریخچه */
-        .history-box {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 20px; padding: 30px; margin-bottom: 50px;
-            border-right: 4px solid var(--secondary);
-        }
-        .history-content { line-height: 1.8; opacity: 0.8; text-align: justify; }
-
-        /* فرم سفارش */
-        .order-zone {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 30px; padding: 40px; max-width: 700px; margin: 0 auto;
-        }
-        .inp {
-            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-            padding: 15px; color: var(--text); border-radius: 10px; margin-bottom: 20px; outline: none;
-        }
-        .inp:focus { border-color: var(--accent); }
-
-        footer { text-align: center; margin-top: 50px; padding: 30px; border-top: 1px solid var(--border); color: #777; }
-        .reza { color: var(--accent); font-weight: bold; text-transform: uppercase; }
-
-        @media(max-width: 768px) { .cursor, .cursor-dot { display: none; } * { cursor: auto; } }
-    </style>
-</head>
-<body>
-
-    <div id="loader">
-        <h2 style="color:white; letter-spacing:3px;">INITIALIZING SYSTEM...</h2>
-        <div class="loader-bar"><div class="loader-progress"></div></div>
-    </div>
-
-    <div class="cursor"></div>
-    <div class="cursor-dot"></div>
-    <canvas id="bgCanvas"></canvas>
-    
-    <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
-
-    <div class="sys-info-bar">
-        <div id="sys-clock">--:--:--</div>
-        <div style="display:flex;">
-            <div class="info-item" id="user-ip"><i class="fas fa-network-wired"></i> شناسایی...</div>
-            <div class="info-item" id="user-device"><i class="fas fa-laptop-code"></i> دستگاه</div>
-        </div>
-    </div>
-
-    <div class="container">
-        <header>
-            <div class="glitch-text">NEXT LEVEL SHOP</div>
-            <p style="color: var(--accent); margin-top:10px;">خرید استارز و تون با تکنولوژی آینده</p>
-        </header>
-
-        <div class="grid">
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-star"></i></div>
-                <h3>Telegram Stars</h3>
-                <p>شارژ آنی برای ربات‌ها</p>
-                <button onclick="scrollToOrder('Stars')" class="btn">خرید استارز</button>
-            </div>
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-gem"></i></div>
-                <h3>TON Coin</h3>
-                <p>انتقال مستقیم به والت</p>
-                <button onclick="scrollToOrder('TON')" class="btn">خرید تون</button>
-            </div>
-        </div>
-
-        <div class="game-wrapper">
-            <div class="game-stats">
-                <span>Score: <span id="gameScore">0</span></span>
-                <span>Best: <span id="gameBest">0</span></span>
-            </div>
-            <div id="gameOverlay" class="game-overlay">
-                <h2 style="color:white; margin-bottom:20px; font-size:2rem; text-shadow:0 0 10px var(--accent);">CYBER DODGE</h2>
-                <p style="color:#ccc; margin-bottom:30px;">با موس یا لمس چپ و راست بروید<br>استارز بگیرید، از قرمزها فرار کنید!</p>
-                <button class="btn-play" onclick="startGame()">شروع بازی</button>
-            </div>
-            <canvas id="gameCanvas"></canvas>
-        </div>
-
-        <div class="history-box">
-            <div style="font-size:1.5rem; margin-bottom:15px; color:var(--accent);"><i class="fas fa-history"></i>&nbsp; تاریخچه تکنولوژی</div>
-            <p class="history-content">
-                <b>تون کوین (TON):</b> شبکه‌ای که توسط برادران دوروف (خالقان تلگرام) طراحی شد تا سریع‌ترین بلاکچین جهان باشد. این شبکه اکنون قلب تپنده وب ۳ در تلگرام است.<br><br>
-                <b>استارز (Stars):</b> واحد ارزی جدید تلگرام برای عبور از تحریم‌های اپل و گوگل. با استارز می‌توانید در بازی‌ها خرید کنید یا محتوای دیجیتال بخرید. ما در اینجا ارزان‌ترین استارز را ارائه می‌دهیم.
-            </p>
-        </div>
-
-        <section id="order-zone" class="order-zone">
-            <h2 style="text-align:center; margin-bottom:30px;"><i class="fas fa-shopping-cart"></i> ثبت سفارش نهایی</h2>
-            <select id="p-type" class="inp">
-                <option value="Stars">استارز (Telegram Stars)</option>
-                <option value="TON">تون کوین (TON)</option>
-            </select>
-            <input type="text" id="p-amount" class="inp" placeholder="تعداد (مثلا: 1000 استارز)">
-            <input type="text" id="p-id" class="inp" placeholder="آیدی تلگرام شما (@username)" dir="ltr" style="text-align:left;">
-            <button onclick="submitOrder()" class="btn" style="width:100%;">دریافت کد رهگیری و پرداخت</button>
-        </section>
-
-        <footer>
-            <p>DESIGNED BY <span class="reza">REZA</span> | 2025</p>
-        </footer>
-    </div>
-
-    <script>
-        const ADMIN_ID = "justfor_everyone";
-
-        // --- تنظیمات عمومی سایت ---
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
-            }, 1500);
-            
-            // لود رکورد بازی
-            const savedBest = localStorage.getItem('cyberBest') || 0;
-            document.getElementById('gameBest').innerText = savedBest;
-            
-            // مقداردهی اولیه ذرات پس‌زمینه
-            initBgParticles();
-        }
-
-        function toggleTheme() {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-            // حذف فراخوانی initBgParticles() از اینجا
-        }
-
-        // اطلاعات سیستم
-        setInterval(() => {
-            document.getElementById('sys-clock').innerText = new Date().toLocaleTimeString('fa-IR');
-            if(document.getElementById('user-ip').innerText.includes('...')) {
-                fetch('https://api.ipify.org?format=json')
-                .then(res => res.json())
-                .then(data => document.getElementById('user-ip').innerHTML = `<i class="fas fa-globe"></i> ${data.ip}`)
-                .catch(() => document.getElementById('user-ip').innerText = "Hidden IP");
-            }
-            const device = /Android|iPhone/i.test(navigator.userAgent) ? 'موبایل' : 'کامپیوتر';
-            document.getElementById('user-device').innerHTML = `<i class="fas fa-${device==='موبایل'?'mobile':'desktop'}"></i> ${device}`;
-        }, 1000);
-
-        // کرسر سفارشی
-        const cursor = document.querySelector('.cursor');
-        const dot = document.querySelector('.cursor-dot');
-        document.addEventListener('mousemove', (e) => {
-            dot.style.left = e.clientX + 'px';
-            dot.style.top = e.clientY + 'px';
-            cursor.style.left = (e.clientX - 15) + 'px';
-            cursor.style.top = (e.clientY - 15) + 'px';
-        });
-
-        // ثبت سفارش
-        function scrollToOrder(type) {
-            document.getElementById('p-type').value = type;
-            document.getElementById('order-zone').scrollIntoView({behavior: 'smooth'});
-        }
-
-        function submitOrder() {
-            const type = document.getElementById('p-type').value;
-            const amount = document.getElementById('p-amount').value;
-            const uid = document.getElementById('p-id').value;
-            if(!amount || !uid) { alert('لطفا اطلاعات را کامل کنید'); return; }
-            const code = 'R-' + Math.floor(Math.random() * 100000);
-            const msg = `🚨 *سفارش جدید*\n----------------\n🔖 کد: \`${code}\`\n📦 محصول: ${type}\n💰 مقدار: ${amount}\n👤 کاربر: ${uid}\n----------------\nلطفا شماره کارت بدهید.`;
-            window.open(`https://t.me/${ADMIN_ID}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        // --- موتور بازی (Cyber Dodge) ---
-        const gCanvas = document.getElementById('gameCanvas');
-        const gCtx = gCanvas.getContext('2d');
-        let gameLoopId;
-        let gameScore = 0;
-        let isPlaying = false;
-        let playerX = 150;
-        let items = []; // شامل ستاره‌ها و موانع
-        let spawnRate = 60;
-        let frameCount = 0;
-        let speedMultiplier = 1;
-
-        // تنظیم اندازه بازی
-        function resizeGame() {
-            gCanvas.width = gCanvas.parentElement.offsetWidth;
-            gCanvas.height = 400;
-            playerX = gCanvas.width / 2;
-        }
-        window.addEventListener('resize', resizeGame);
-        resizeGame();
-
-        // کنترل سفینه
-        gCanvas.addEventListener('mousemove', (e) => {
-            if(!isPlaying) return;
-            const rect = gCanvas.getBoundingClientRect();
-            playerX = e.clientX - rect.left;
-        });
-        
-        gCanvas.addEventListener('touchmove', (e) => {
-            if(!isPlaying) return;
-            const rect = gCanvas.getBoundingClientRect();
-            playerX = e.touches[0].clientX - rect.left;
-        }, {passive: false});
-
-        function startGame() {
-            document.getElementById('gameOverlay').style.display = 'none';
-            gameScore = 0;
-            items = [];
-            speedMultiplier = 1;
-            isPlaying = true;
-            document.getElementById('gameScore').innerText = '0';
-            gameLoop();
-        }
-
-        function gameOver() {
-            isPlaying = false;
-            cancelAnimationFrame(gameLoopId);
-            document.getElementById('gameOverlay').style.display = 'flex';
-            document.querySelector('#gameOverlay h2').innerText = "GAME OVER!";
-            
-            // ذخیره رکورد
-            const best = parseInt(localStorage.getItem('cyberBest') || 0);
-            if(gameScore > best) {
-                localStorage.setItem('cyberBest', gameScore);
-                document.getElementById('gameBest').innerText = gameScore;
-            }
-        }
-
-        function gameLoop() {
-            if(!isPlaying) return;
-            gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
-
-            // رسم بازیکن (سفینه مثلثی)
-            gCtx.fillStyle = '#00f3ff';
-            gCtx.shadowBlur = 15;
-            gCtx.shadowColor = '#00f3ff';
-            gCtx.beginPath();
-            gCtx.moveTo(playerX, 350);
-            gCtx.lineTo(playerX - 15, 390);
-            gCtx.lineTo(playerX + 15, 390);
-            gCtx.fill();
-            gCtx.shadowBlur = 0;
-
-            // تولید آیتم‌ها
-            frameCount++;
-            if(frameCount % Math.floor(spawnRate / speedMultiplier) === 0) {
-                const isBad = Math.random() > 0.7; // 30% شانس مانع
-                items.push({
-                    x: Math.random() * (gCanvas.width - 20),
-                    y: -20,
-                    size: Math.random() * 10 + 10,
-                    speed: (Math.random() * 2 + 2) * speedMultiplier,
-                    type: isBad ? 'bad' : 'good'
-                });
-            }
-
-            // افزایش سختی
-            if(frameCount % 500 === 0) speedMultiplier += 0.1;
-
-            // حرکت و رسم آیتم‌ها
-            for(let i = 0; i < items.length; i++) {
-                let p = items[i];
-                p.y += p.speed;
-
-                // رسم
-                gCtx.beginPath();
-                if(p.type === 'good') {
-                    gCtx.fillStyle = '#bc13fe'; // بنفش (استارز)
-                    gCtx.arc(p.x, p.y, p.size/2, 0, Math.PI*2);
-                    gCtx.fill();
-                } else {
-                    gCtx.fillStyle = '#ff0055'; // قرمز (ویروس)
-                    gCtx.rect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
-                    gCtx.fill();
-                }
-
-                // برخورد
-                const dist = Math.sqrt(Math.pow(p.x - playerX, 2) + Math.pow(p.y - 370, 2));
-                if(dist < p.size + 10) {
-                    if(p.type === 'bad') {
-                        gameOver();
-                        return;
-                    } else {
-                        gameScore += 10;
-                        document.getElementById('gameScore').innerText = gameScore;
-                        items.splice(i, 1);
-                        i--;
-                        continue;
-                    }
-                }
-
-                // حذف اگر از صفحه خارج شد
-                if(p.y > 410) {
-                    items.splice(i, 1);
-                    i--;
-                }
-            }
-
-            gameLoopId = requestAnimationFrame(gameLoop);
-        }
-
-        // --- پس زمینه ذرات سایت ---
-        const bgCanvas = document.getElementById("bgCanvas");
-        const ctx = bgCanvas.getContext("2d");
-        let particlesArray = [];
-
-        function resizeBg() {
-            bgCanvas.width = window.innerWidth;
-            bgCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeBg);
-        resizeBg();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * bgCanvas.width;
- 
