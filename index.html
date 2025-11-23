@@ -1,149 +1,387 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Super Modern WOW Site</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HamiWorkHQ — شخصی</title>
+<meta name="description" content="وبسایت شخصی حامد | تحلیل داده و اقتصاد" />
+
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-RD-font-face.css" rel="stylesheet" type="text/css" />
+
 <style>
-  /* Reset */
-  * { margin:0; padding:0; box-sizing:border-box; font-family: 'Arial', sans-serif; }
-  html, body { height:100%; overflow:hidden; }
+/* ================= CONFIG & THEMES ================= */
+:root{
+  /* --- تم پیش‌فرض (مشکی مطلق و طلایی) --- */
+  --bg: #000000; /* مشکی مطلق */
+  --card-bg: linear-gradient(145deg, #121212 0%, #050505 100%); /* کارت خیلی تیره */
+  --text: #eeeeee;
+  --muted: #888888;
+  --accent: #ffd700; /* طلایی */
+  --accent-glow: rgba(255, 215, 0, 0.3);
+  
+  --glass: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.08);
+  --radius: 24px;
+  --maxw: 900px;
+  --font: 'Vazirmatn RD', sans-serif;
+}
 
-  /* Background Gradient + Animation */
-  body {
-    background: linear-gradient(270deg, #ff0055, #ffdd00, #00ffcc, #5500ff);
-    background-size: 800% 800%;
-    animation: gradientBG 20s ease infinite;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-  }
+/* --- تم‌های رنگی (اصلاح شده: تیره‌تر و عمیق‌تر) --- */
 
-  @keyframes gradientBG {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-  }
+/* 1. Oceanic (مشکی با ته رنگ سرمه‌ای خیلی تیره) */
+body.theme-oceanic { 
+    --bg: #020408; 
+    --card-bg: linear-gradient(145deg, #0a1116 0%, #020405 100%);
+    --text: #e6f7ff;
+    --muted: #6b818c;
+    --accent: #00A6FB; 
+    --accent-glow: rgba(0, 166, 251, 0.3); 
+}
 
-  /* Text */
-  h1 {
-    font-size: 4rem;
-    text-align:center;
-    text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 30px #00ffff;
-    animation: glowText 2s ease-in-out infinite alternate;
-    position:relative;
-  }
+/* 2. Rose (مشکی با ته رنگ زرشکی خیلی تیره) */
+body.theme-rose { 
+    --bg: #0a0204; 
+    --card-bg: linear-gradient(145deg, #14080a 0%, #050102 100%);
+    --text: #fff0f5;
+    --muted: #8a7a7f;
+    --accent: #ff4d88; 
+    --accent-glow: rgba(255, 77, 136, 0.3); 
+}
 
-  @keyframes glowText {
-    0%{text-shadow: 0 0 5px #fff, 0 0 10px #ff00ff, 0 0 15px #00ffff;}
-    100%{text-shadow: 0 0 20px #fff, 0 0 40px #ff00ff, 0 0 60px #00ffff;}
-  }
+/* 3. Forest (مشکی با ته رنگ سبز لجنی خیلی تیره) */
+body.theme-forest { 
+    --bg: #010802; 
+    --card-bg: linear-gradient(145deg, #08140a 0%, #000501 100%);
+    --text: #eafff0;
+    --muted: #758a7b;
+    --accent: #00cc66; 
+    --accent-glow: rgba(0, 204, 102, 0.3); 
+}
 
-  /* Particle Canvas */
-  canvas { position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; }
+/* 4. Vapor (مشکی با ته رنگ بنفش نیمه‌شب) */
+body.theme-vapor { 
+    --bg: #05020a; 
+    --card-bg: linear-gradient(145deg, #0f0817 0%, #030105 100%);
+    --text: #f5f0ff;
+    --muted: #857a94;
+    --accent: #b866ff; 
+    --accent-glow: rgba(184, 102, 255, 0.3); 
+}
 
-  /* Social Links */
-  .social {
-    position:absolute;
-    bottom:50px;
-    display:flex;
-    gap:20px;
-  }
 
-  .social a {
-    font-size:2rem;
-    color:white;
-    text-decoration:none;
-    transition: all 0.3s ease;
-    position:relative;
-  }
+/* --- حالت روشن (Light Mode) --- */
+body.light {
+  --bg: #f2f4f8; 
+  --card-bg: #ffffff;
+  --text: #111;
+  --muted: #555;
+  --glass: rgba(0,0,0,0.03);
+  --border: rgba(0,0,0,0.08);
+  --accent-glow: rgba(0,0,0,0.1); 
+}
+/* اصلاح رنگ اکسنت در حالت روشن */
+body.light.theme-oceanic { --accent: #0077cc; }
+body.light.theme-rose { --accent: #d60040; }
+body.light.theme-forest { --accent: #00994d; }
+body.light.theme-vapor { --accent: #8a2be2; }
 
-  .social a:hover {
-    transform: scale(1.3);
-    text-shadow: 0 0 10px #fff, 0 0 20px #ff0, 0 0 30px #0ff;
-  }
+/* Base Styles */
+*{box-sizing:border-box}
+html { min-height: 100%; scroll-behavior: smooth; }
+body{
+  min-height: 100vh; margin:0; font-family:var(--font);
+  color:var(--text); background:var(--bg);
+  transition:background 0.4s ease, color 0.4s ease, all 0.4s ease;
+  display:flex; justify-content:center; padding:20px 15px;
+}
 
-</style>
-</head>
-<body>
+/* Container & Card */
+.container{ width:100%; max-width:var(--maxw); position:relative; z-index:1; }
 
-<canvas id="particles"></canvas>
+.card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); /* سایه عمیق‌تر برای تم مشکی */
+  border-radius:var(--radius);
+  padding:35px; 
+  backdrop-filter:blur(15px);
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+body.light .card { box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
 
-<h1 class="glitch">🚀 Welcome to the Future 🚀</h1>
+/* Header */
+.header{
+  display:flex; flex-direction:column; align-items:center; text-align:center; gap:15px;
+  padding-bottom:25px; border-bottom:1px solid var(--border);
+}
 
-<div class="social">
-  <a href="#" target="_blank">🌐</a>
-  <a href="#" target="_blank">🐦</a>
-  <a href="#" target="_blank">📸</a>
-</div>
+.profile-pic{
+  width:120px; height:120px; border-radius:50%;
+  border:2px solid var(--accent);
+  box-shadow:0 0 25px var(--accent-glow);
+  overflow:hidden; margin-bottom:5px;
+  background:#000; display:flex; align-items:center; justify-content:center;
+  transition:0.4s; cursor: pointer;
+}
+.profile-pic:hover{ transform:scale(1.05) rotate(5deg); }
+.profile-pic img{ width:100%; height:100%; object-fit:cover; }
+.profile-pic span{ font-size:40px; opacity:0.5; }
 
-<script>
-  // Particle JS
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+.intro h1{ margin:0; font-size:28px; font-weight:900; letter-spacing:-0.5px; }
+.intro p{ 
+  margin:10px 0 0; color:var(--muted); font-size:15px; line-height:1.8; 
+  max-width:550px; min-height: 54px; 
+}
+.cursor-blink { animation: blink 1s infinite; border-right: 2px solid var(--accent); }
+@keyframes blink { 0%, 100% { border-color: transparent; } 50% { border-color: var(--accent); } }
 
-  let particlesArray = [];
-  const colors = ['#ff0055','#ffdd00','#00ffcc','#5500ff'];
+/* Control Bar */
+.controls{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:15px; }
+.btn-ctrl{
+  background:var(--glass); border:1px solid var(--border); color:var(--muted);
+  padding:8px 18px; border-radius:50px; cursor:pointer; font-size:13px; font-weight:500;
+  transition:all 0.2s; display:flex; align-items:center; gap:6px; font-family: inherit;
+}
+.btn-ctrl:hover{ background:var(--border); color:var(--accent); border-color:var(--accent); }
 
-  window.addEventListener('resize', ()=>{
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
+/* Layout */
+.grid-layout{ display:grid; grid-template-columns:1fr 1.5fr; gap:30px; margin-top:30px; }
+@media(max-width:850px){ .grid-layout{ grid-template-columns:1fr; } }
 
-  class Particle {
-    constructor(){
-      this.x = Math.random()*canvas.width;
-      this.y = Math.random()*canvas.height;
-      this.size = Math.random()*3 + 1;
-      this.speedX = (Math.random()-0.5)*2;
-      this.speedY = (Math.random()-0.5)*2;
-      this.color = colors[Math.floor(Math.random()*colors.length)];
-    }
-    update(){
-      this.x += this.speedX;
-      this.y += this.speedY;
-      if(this.x<0 || this.x>canvas.width) this.speedX*=-1;
-      if(this.y<0 || this.y>canvas.height) this.speedY*=-1;
-    }
-    draw(){
-      ctx.fillStyle=this.color;
-      ctx.shadowColor=this.color;
-      ctx.shadowBlur=10;
-      ctx.beginPath();
-      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-      ctx.fill();
-    }
-  }
+/* Typography */
+h3{ margin:0 0 18px; font-size:17px; color:var(--accent); display:flex; align-items:center; gap:10px; font-weight:800; }
+h3::before{ content:''; display:block; width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 10px var(--accent); }
 
-  function init(){
-    particlesArray = [];
-    for(let i=0;i<400;i++){
-      particlesArray.push(new Particle());
-    }
-  }
-  init();
+/* Links */
+.link-box{
+  display:flex; align-items:center; gap:14px; padding:12px;
+  background:var(--glass); border-radius:16px; border:1px solid var(--border);
+  margin-bottom:12px; transition:0.3s; text-decoration:none; color:var(--text);
+}
+.link-box:hover{ border-color:var(--accent); transform:translateX(-5px); background:rgba(255,255,255,0.05); }
+.link-icon{ width:38px; height:38px; border-radius:12px; background:rgba(255,255,255,0.03); display:flex; align-items:center; justify-content:center; font-size:20px; }
 
-  function animate(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    particlesArray.forEach(p => {p.update(); p.draw();});
-    requestAnimationFrame(animate);
-  }
-  animate();
+/* Skill Bars */
+.skill-bar-container { margin-bottom: 12px; }
+.skill-label { display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; color:var(--text); }
+.skill-track { width:100%; height:6px; background:var(--glass); border-radius:10px; border:1px solid var(--border); overflow:hidden; }
+.skill-fill { height:100%; background:var(--accent); width:0; transition: width 1.5s ease-out; border-radius:10px; box-shadow: 0 0 10px var(--accent-glow); }
 
-  // Mouse interaction
-  window.addEventListener('mousemove',(e)=>{
-    for(let i=0;i<2;i++){
-      let p = new Particle();
-      p.x = e.x;
-      p.y = e.y;
-      particlesArray.push(p);
-      if(particlesArray.length>500) particlesArray.shift();
-    }
-  });
-</script>
+/* Calculator & Widget Box */
+.calc-box {
+  background:var(--glass); border:1px solid var(--border); border-radius:18px; padding:15px;
+  margin-top:25px; text-align:center;
+}
+.calc-inputs { display:flex; gap:10px; margin-bottom:10px; }
+.calc-input { 
+  width:50%; background:rgba(0,0,0,0.4); /* تیره‌تر برای خوانایی بهتر */
+  border:1px solid var(--border); color:var(--text);
+  padding:8px; border-radius:8px; font-family:inherit; text-align:center; outline:none;
+}
+.calc-btn {
+  width:100%; background:var(--accent); border:none; padding:8px; border-radius:8px;
+  color:#000; font-weight:bold; cursor:pointer; font-family:inherit;
+}
+.calc-result { margin-top:10px; font-size:14px; color:var(--muted); }
+.calc-result span { color:var(--accent); font-weight:bold; font-size:16px; }
 
-</body>
-</html>
+/* Articles */
+.article-item{
+  background:var(--glass); border-radius:18px; margin-bottom:12px; border:1px solid var(--border); overflow:hidden;
+}
+.art-head{ 
+  padding:16px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; 
+  font-weight:700; font-size:14px; transition:0.2s;
+}
+.art-head:hover{ color:var(--accent); background:rgba(255,255,255,0.02); }
+.art-body{ 
+  padding:0 16px 16px; font-size:14px; line-height:1.8; color:var(--muted); 
+  display:none; border-top:1px solid var(--border); padding-top:12px; 
+}
+
+/* Portfolio */
+.portfolio-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:15px; }
+.port-card{
+  border:1px solid var(--border); border-radius:16px; padding:10px;
+
+background:var(--glass); transition:0.3s;
+}
+.port-card:hover{ border-color:var(--accent); transform:translateY(-3px); }
+.port-visual{
+  height: 80px; border-radius:12px; margin-bottom:10px;
+  display:flex; align-items:center; justify-content:center; 
+  color:#fff; font-weight:bold; text-shadow:0 2px 4px rgba(0,0,0,0.3);
+}
+.port-meta{ display:flex; justify-content:space-between; align-items:center; padding:0 4px; }
+.port-title{ font-size:13px; font-weight:700; }
+.port-link{ font-size:11px; color:var(--accent); text-decoration:none; border-bottom:1px dashed var(--accent); }
+
+/* Footer */
+.footer{ 
+  text-align:center; margin-top:40px; font-size:13px; color:var(--muted); opacity:0.6;
+  display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px; 
+}
+.footer-version {
+  font-weight: 600; color: var(--accent); padding: 4px 10px;
+  border: 1px solid var(--accent); border-radius: 8px; font-size: 11px;
+}
+
+/* Animation */
+.fade-in{ animation: fadeIn 0.6s ease forwards; opacity:0; transform:translateY(20px); }
+@keyframes fadeIn { to{ opacity:1; transform:none; } }
+
+/* Crypto List */
+.crypto-list-header {
+    font-size: 14px; margin-bottom: 15px; font-weight: bold; color: var(--accent); 
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.crypto-item {
+    display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--glass);
+}
+.crypto-item:last-child { border-bottom: none; padding-bottom: 0; }
+.crypto-name { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; }
+.crypto-price { font-size: 15px; font-weight: bold; color: var(--text); }
+.crypto-icon-img { width: 24px; height: 24px; }
+
+/* Widgets Row */
+.widgets-row {
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 15px; margin-top: 25px;
+}
+@media(max-width: 600px) { .widgets-row { grid-template-columns: 1fr; } }
+
+/* Clock Widget */
+#date-widget {
+    background: var(--glass); border: 1px solid var(--border); border-radius: 18px;
+    padding: 15px; text-align: center; width: 100%;
+}
+.clock-display {
+    font-size: 32px; font-weight: 900; color: var(--accent); letter-spacing: 1px;
+    margin-bottom: 10px; text-shadow: 0 0 15px var(--accent-glow);
+}
+.date-display {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; font-size: 12px; color: var(--muted);
+}
+.date-display span {
+    padding: 4px 8px; border-radius: 6px; background: var(--border); font-weight: 500; white-space: nowrap;
+}
+
+/* Status Widget */
+.status-widget {
+    background: var(--glass); border: 1px solid var(--border); border-radius: 18px;
+    padding: 15px; display: flex; flex-direction: column; justify-content: center;
+    align-items: center; text-align: center;
+}
+.status-icon {
+    font-size: 28px; margin-bottom: 5px;
+    animation: floatSleep 3s infinite ease-in-out;
+}
+.status-title { font-weight: 800; color: var(--text); font-size: 16px; }
+.status-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+@keyframes floatSleep {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+    50% { transform: translateY(-5px) rotate(5deg); opacity: 1; }
+}
+
+/* Birthdays */
+.birthday-widget {
+  margin-top: 30px; padding: 15px; background: var(--glass);
+  border: 1px solid var(--border); border-radius: 18px; text-align: right;
+}
+.birthday-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+.birthday-item {
+  display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--glass);
+}
+.birthday-item:last-child { border-bottom: none; }
+.bd-name {
+  font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; border-bottom: 1px dashed;
+}
+.bd-countdown { font-size: 13px; font-weight: 600; color: var(--muted); }
+.bd-countdown strong { color: var(--text); font-size: 14px; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center;
+  opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1000;
+}
+.modal-overlay.active { opacity: 1; visibility: visible; }
+.modal-content {
+  background: #111; /* سالید برای خوانایی بهتر */
+  border: 1px solid var(--accent); border-radius: var(--radius); padding: 30px;
+  max-width: 400px; width: 90%; box-shadow: 0 0 50px var(--accent-glow);
+  transform: scale(0.8); transition: transform 0.3s ease; text-align: right;
+}
+.modal-overlay.active .modal-content { transform: scale(1); }
+.modal-title {
+  font-size: 24px; font-weight: 900; color: var(--accent); margin-bottom: 15px;
+  border-bottom: 2px solid var(--border); padding-bottom: 8px;
+}
+.modal-body { font-size: 14px; line-height: 1.8; color: #ddd; margin-bottom: 20px; }
+.modal-close-btn {
+  background: var(--accent); color: #000; border: none; padding: 8px 20px;
+  border-radius: 50px; font-weight: bold; cursor: pointer; float: left; transition: opacity 0.2s;
+}
+.modal-close-btn:hover { opacity: 0.8; }
+
+/* Quote */
+.quote-box {
+  margin-top: 30px; padding: 25px; background: var(--glass); border: 1px solid var(--border);
+  border-radius: 18px; text-align: center; font-style: italic; font-size: 16px;
+  line-height: 1.8; color: var(--text);
+}
+.quote-text::before, .quote-text::after { content: '"'; font-size: 20px; color: var(--accent); padding: 0 4px; }
+.quote-author { display: block; margin-top: 15px; font-style: normal; font-weight: 700; color: var(--accent); font-size: 14px; }
+.quote-source { color: var(--muted); font-size: 11px; font-weight: 500; margin-top: 5px; }
+
+/* --- NEW: Game Section (Miner Game) --- */
+.game-section {
+    padding: 25px; margin-top: 30px; background: var(--card-bg); 
+    border: 1px solid var(--border); border-radius: var(--radius);
+}
+.game-header { text-align: right; margin-bottom: 20px; }
+.game-header h3 { margin: 0 0 5px; } /* استفاده از h3 موجود */
+
+.miner-game {
+    display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;
+}
+.miner-click-area {
+    flex-grow: 1; min-width: 250px; text-align: center; background: var(--glass);
+    border: 1px solid var(--border); border-radius: 16px; padding: 20px;
+    display: flex; flex-direction: column; align-items: center;
+}
+.miner-stats {
+    font-size: 14px; color: var(--muted); margin-bottom: 15px;
+}
+.miner-stats strong { font-size: 24px; color: var(--accent); display: block; margin-top: 5px; }
+
+#mine-btn {
+    width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--accent);
+    background: #000; color: var(--accent); font-size: 60px; font-weight: 900;
+    cursor: pointer; transition: all 0.1s ease; box-shadow: 0 0 20px var(--accent-glow);
+    animation: pulse 1.5s infinite;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+}
+#mine-btn:active { transform: scale(0.95); box-shadow: 0 0 5px var(--accent-glow); animation: none; }
+@keyframes pulse { 0% { box-shadow: 0 0 20px var(--accent-glow); } 50% { box-shadow: 0 0 35px var(--accent-glow); } 100% { box-shadow: 0 0 20px var(--accent-glow); } }
+
+.miner-shop {
+    width: 100%; max-width: 300px; padding: 15px; border-radius: 16px;
+    background: var(--glass); border: 1px solid var(--border);
+}
+.shop-item {
+    padding: 10px; margin-bottom: 8px; border: 1px solid var(--border); border-radius: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(0,0,0,0.1);
+}
+.shop-info { font-size: 13px; font-weight: 600; }
+.shop-cost { color: var(--accent); font-size: 14px; font-weight: bold; }
+.buy-btn {
+    background: var(--accent); color: #000; border: none; padding: 5px 12px;
+    border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;
+    transition: opacity 0.2s;
+}
+.buy-btn:disabled { background: var(--muted); cursor: not-allowed; opacity: 0.5; color: #333; }
+.buy-btn:hover:not(:disabled) { opacity: 0.8; }
