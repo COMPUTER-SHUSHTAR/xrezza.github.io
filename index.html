@@ -21,7 +21,7 @@
 
         [data-theme="light"] {
             --bg: #eef2f5;
-            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-bg: rgba(255, 255, 255, 0.85);
             --text: #1a1a2e;
             --accent: #2980b9;
             --secondary: #8e44ad;
@@ -37,25 +37,25 @@
             color: var(--text);
             overflow-x: hidden;
             min-height: 100vh;
-            transition: 0.5s;
+            transition: background 0.5s, color 0.5s;
         }
 
-        /* لودینگ */
+        /* لودینگ اسکرین */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 9999;
+            background: #000; z-index: 99999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 1s;
+            transition: opacity 0.8s ease-out;
         }
         .loader-bar {
-            width: 200px; height: 3px; background: #333; margin-top: 20px;
-            position: relative; overflow: hidden;
+            width: 200px; height: 4px; background: #333; margin-top: 20px;
+            position: relative; overflow: hidden; border-radius: 2px;
         }
         .loader-progress {
             position: absolute; top: 0; left: 0; height: 100%; width: 0%;
-            background: var(--accent); animation: load 2s ease forwards;
+            background: var(--accent); animation: loadProgress 2.5s ease forwards;
         }
-        @keyframes load { 100% { width: 100%; } }
+        @keyframes loadProgress { 0% {width: 0%} 100% {width: 100%} }
 
         /* کرسر موس */
         .cursor {
@@ -85,11 +85,12 @@
             width: 40px; height: 40px; border-radius: 50%;
             background: var(--card-bg); border: 1px solid var(--border);
             color: var(--text); display: flex; justify-content: center; align-items: center;
-            box-shadow: var(--shadow); cursor: none;
+            box-shadow: var(--shadow); cursor: none; transition: 0.3s;
         }
+        .theme-btn:hover { transform: scale(1.1); }
 
-        /* پس زمینه ذرات */
-        #bgCanvas { position: fixed; top: 0; left: 0; z-index: 0; }
+        /* پس زمینه */
+        #bgCanvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
 
@@ -126,7 +127,7 @@
         }
         .btn:hover { box-shadow: 0 0 20px var(--accent); letter-spacing: 1px; }
 
-        /* --- استایل جدید بازی --- */
+        /* --- بازی --- */
         .game-wrapper {
             background: #000;
             border: 2px solid var(--accent);
@@ -138,18 +139,15 @@
         }
         
         canvas#gameCanvas {
-            display: block;
-            width: 100%;
-            height: 400px;
+            display: block; width: 100%; height: 400px;
             background: radial-gradient(circle at bottom, #1a0b2e 0%, #000 100%);
-            cursor: none;
-            touch-action: none; /* جلوگیری از اسکرول موبایل */
+            cursor: none; touch-action: none;
         }
 
         .game-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.8); z-index: 5;
+            background: rgba(0,0,0,0.85); z-index: 5;
         }
 
         .game-stats {
@@ -188,7 +186,11 @@
         footer { text-align: center; margin-top: 50px; padding: 30px; border-top: 1px solid var(--border); color: #777; }
         .reza { color: var(--accent); font-weight: bold; text-transform: uppercase; }
 
-        @media(max-width: 768px) { .cursor, .cursor-dot { display: none; } * { cursor: auto; } }
+        @media(max-width: 768px) { 
+            .cursor, .cursor-dot { display: none !important; } 
+            * { cursor: auto !important; }
+            .glitch-text { font-size: 2.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -218,6 +220,8 @@
             <p style="color: var(--accent); margin-top:10px;">خرید استارز و تون با تکنولوژی آینده</p>
         </header>
 
+        
+
         <div class="grid">
             <div class="card">
                 <div class="card-icon"><i class="fas fa-star"></i></div>
@@ -240,7 +244,9 @@
             </div>
             <div id="gameOverlay" class="game-overlay">
                 <h2 style="color:white; margin-bottom:20px; font-size:2rem; text-shadow:0 0 10px var(--accent);">CYBER DODGE</h2>
-                <p style="color:#ccc; margin-bottom:30px;">با موس یا لمس چپ و راست بروید<br>استارز بگیرید، از قرمزها فرار کنید!</p>
+                <p style="color:#ccc; margin-bottom:30px; text-align:center;">
+                    موس را حرکت دهید یا صفحه را لمس کنید<br>از قرمزها فرار کنید!
+                </p>
                 <button class="btn-play" onclick="startGame()">شروع بازی</button>
             </div>
             <canvas id="gameCanvas"></canvas>
@@ -249,8 +255,8 @@
         <div class="history-box">
             <div style="font-size:1.5rem; margin-bottom:15px; color:var(--accent);"><i class="fas fa-history"></i>&nbsp; تاریخچه تکنولوژی</div>
             <p class="history-content">
-                <b>تون کوین (TON):</b> شبکه‌ای که توسط برادران دوروف (خالقان تلگرام) طراحی شد تا سریع‌ترین بلاکچین جهان باشد. این شبکه اکنون قلب تپنده وب ۳ در تلگرام است.<br><br>
-                <b>استارز (Stars):</b> واحد ارزی جدید تلگرام برای عبور از تحریم‌های اپل و گوگل. با استارز می‌توانید در بازی‌ها خرید کنید یا محتوای دیجیتال بخرید. ما در اینجا ارزان‌ترین استارز را ارائه می‌دهیم.
+                <b>تون کوین (TON):</b> شبکه‌ای که توسط برادران دوروف طراحی شد. اکنون قلب تپنده وب ۳ در تلگرام است.<br><br>
+                <b>استارز (Stars):</b> واحد ارزی جدید تلگرام برای پرداخت‌های دیجیتال. ما در اینجا ارزان‌ترین استارز را ارائه می‌دهیم.
             </p>
         </div>
 
@@ -273,49 +279,60 @@
     <script>
         const ADMIN_ID = "justfor_everyone";
 
-        // --- تنظیمات عمومی سایت ---
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
-            }, 1500);
-            
-            // لود رکورد بازی
-            const savedBest = localStorage.getItem('cyberBest') || 0;
-            document.getElementById('gameBest').innerText = savedBest;
+        // --- رفع مشکل لودینگ (کد اصلاح شده) ---
+        function removeLoader() {
+            const loader = document.getElementById('loader');
+            if(loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 800);
+            }
         }
 
+        // 1. اگر سایت لود شد، حذف کن
+        window.addEventListener('load', removeLoader);
+        
+        // 2. اگر لود نشد (نت ضعیف)، بعد از 3 ثانیه به زور حذف کن (Failsafe)
+        setTimeout(removeLoader, 3000);
+
+        // --- تنظیمات تم ---
         function toggleTheme() {
             const html = document.documentElement;
             const current = html.getAttribute('data-theme');
             html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-            initBgParticles(); 
+            if(window.initBgParticles) window.initBgParticles(); 
         }
 
-        // اطلاعات سیستم
+        // --- اطلاعات سیستم ---
         setInterval(() => {
-            document.getElementById('sys-clock').innerText = new Date().toLocaleTimeString('fa-IR');
-            if(document.getElementById('user-ip').innerText.includes('...')) {
-                fetch('https://api.ipify.org?format=json')
-                .then(res => res.json())
-                .then(data => document.getElementById('user-ip').innerHTML = `<i class="fas fa-globe"></i> ${data.ip}`)
-                .catch(() => document.getElementById('user-ip').innerText = "Hidden IP");
-            }
-            const device = /Android|iPhone/i.test(navigator.userAgent) ? 'موبایل' : 'کامپیوتر';
-            document.getElementById('user-device').innerHTML = `<i class="fas fa-${device==='موبایل'?'mobile':'desktop'}"></i> ${device}`;
+            try {
+                document.getElementById('sys-clock').innerText = new Date().toLocaleTimeString('fa-IR');
+                // تلاش برای دریافت IP (با مدیریت خطا)
+                if(document.getElementById('user-ip') && document.getElementById('user-ip').innerText.includes('...')) {
+                    fetch('https://api.ipify.org?format=json')
+                    .then(res => res.json())
+                    .then(data => document.getElementById('user-ip').innerHTML = `<i class="fas fa-globe"></i> ${data.ip}`)
+                    .catch(() => document.getElementById('user-ip').innerText = "Hidden IP");
+                }
+                const device = /Android|iPhone/i.test(navigator.userAgent) ? 'موبایل' : 'کامپیوتر';
+                document.getElementById('user-device').innerHTML = `<i class="fas fa-${device==='موبایل'?'mobile':'desktop'}"></i> ${device}`;
+            } catch(e) { console.log('Info Error'); }
         }, 1000);
 
-        // کرسر سفارشی
-        const cursor = document.querySelector('.cursor');
-        const dot = document.querySelector('.cursor-dot');
-        document.addEventListener('mousemove', (e) => {
-            dot.style.left = e.clientX + 'px';
-            dot.style.top = e.clientY + 'px';
-            cursor.style.left = (e.clientX - 15) + 'px';
-            cursor.style.top = (e.clientY - 15) + 'px';
-        });
+        // --- کرسر موس ---
+        try {
+            const cursor = document.querySelector('.cursor');
+            const dot = document.querySelector('.cursor-dot');
+            document.addEventListener('mousemove', (e) => {
+                if(window.innerWidth > 768) {
+                    dot.style.left = e.clientX + 'px';
+                    dot.style.top = e.clientY + 'px';
+                    cursor.style.left = (e.clientX - 15) + 'px';
+                    cursor.style.top = (e.clientY - 15) + 'px';
+                }
+            });
+        } catch(e) {}
 
-        // ثبت سفارش
+        // --- ثبت سفارش ---
         function scrollToOrder(type) {
             document.getElementById('p-type').value = type;
             document.getElementById('order-zone').scrollIntoView({behavior: 'smooth'});
@@ -331,152 +348,114 @@
             window.open(`https://t.me/${ADMIN_ID}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // --- موتور بازی (Cyber Dodge) ---
+        // --- بازی Cyber Dodge (با محافظت خطا) ---
         const gCanvas = document.getElementById('gameCanvas');
-        const gCtx = gCanvas.getContext('2d');
-        let gameLoopId;
-        let gameScore = 0;
-        let isPlaying = false;
-        let playerX = 150;
-        let items = []; // شامل ستاره‌ها و موانع
-        let spawnRate = 60;
-        let frameCount = 0;
-        let speedMultiplier = 1;
+        if(gCanvas) {
+            const gCtx = gCanvas.getContext('2d');
+            let gameLoopId;
+            let gameScore = 0;
+            let isPlaying = false;
+            let playerX = 150;
+            let items = [];
+            let spawnRate = 60;
+            let frameCount = 0;
+            let speedMultiplier = 1;
 
-        // تنظیم اندازه بازی
-        function resizeGame() {
-            gCanvas.width = gCanvas.parentElement.offsetWidth;
-            gCanvas.height = 400;
-            playerX = gCanvas.width / 2;
-        }
-        window.addEventListener('resize', resizeGame);
-        resizeGame();
+            // لود رکورد
+            const savedBest = localStorage.getItem('cyberBest') || 0;
+            if(document.getElementById('gameBest')) document.getElementById('gameBest').innerText = savedBest;
 
-        // کنترل سفینه
-        gCanvas.addEventListener('mousemove', (e) => {
-            if(!isPlaying) return;
-            const rect = gCanvas.getBoundingClientRect();
-            playerX = e.clientX - rect.left;
-        });
-        
-        gCanvas.addEventListener('touchmove', (e) => {
-            if(!isPlaying) return;
-            const rect = gCanvas.getBoundingClientRect();
-            playerX = e.touches[0].clientX - rect.left;
-        }, {passive: false});
-
-        function startGame() {
-            document.getElementById('gameOverlay').style.display = 'none';
-            gameScore = 0;
-            items = [];
-            speedMultiplier = 1;
-            isPlaying = true;
-            document.getElementById('gameScore').innerText = '0';
-            gameLoop();
-        }
-
-        function gameOver() {
-            isPlaying = false;
-            cancelAnimationFrame(gameLoopId);
-            document.getElementById('gameOverlay').style.display = 'flex';
-            document.querySelector('#gameOverlay h2').innerText = "GAME OVER!";
-            
-            // ذخیره رکورد
-            const best = parseInt(localStorage.getItem('cyberBest') || 0);
-            if(gameScore > best) {
-                localStorage.setItem('cyberBest', gameScore);
-                document.getElementById('gameBest').innerText = gameScore;
+            function resizeGame() {
+                if(gCanvas.parentElement) {
+                    gCanvas.width = gCanvas.parentElement.offsetWidth;
+                    gCanvas.height = 400;
+                    playerX = gCanvas.width / 2;
+                }
             }
-        }
+            window.addEventListener('resize', resizeGame);
+            resizeGame();
 
-        function gameLoop() {
-            if(!isPlaying) return;
-            gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
+            // کنترل
+            function movePlayer(clientX) {
+                if(!isPlaying) return;
+                const rect = gCanvas.getBoundingClientRect();
+                playerX = clientX - rect.left;
+            }
+            gCanvas.addEventListener('mousemove', (e) => movePlayer(e.clientX));
+            gCanvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); 
+                movePlayer(e.touches[0].clientX);
+            }, {passive: false});
 
-            // رسم بازیکن (سفینه مثلثی)
-            gCtx.fillStyle = '#00f3ff';
-            gCtx.shadowBlur = 15;
-            gCtx.shadowColor = '#00f3ff';
-            gCtx.beginPath();
-            gCtx.moveTo(playerX, 350);
-            gCtx.lineTo(playerX - 15, 390);
-            gCtx.lineTo(playerX + 15, 390);
-            gCtx.fill();
-            gCtx.shadowBlur = 0;
-
-            // تولید آیتم‌ها
-            frameCount++;
-            if(frameCount % Math.floor(spawnRate / speedMultiplier) === 0) {
-                const isBad = Math.random() > 0.7; // 30% شانس مانع
-                items.push({
-                    x: Math.random() * (gCanvas.width - 20),
-                    y: -20,
-                    size: Math.random() * 10 + 10,
-                    speed: (Math.random() * 2 + 2) * speedMultiplier,
-                    type: isBad ? 'bad' : 'good'
-                });
+            window.startGame = function() {
+                document.getElementById('gameOverlay').style.display = 'none';
+                gameScore = 0;
+                items = [];
+                speedMultiplier = 1;
+                isPlaying = true;
+                document.getElementById('gameScore').innerText = '0';
+                gameLoop();
             }
 
-            // افزایش سختی
-            if(frameCount % 500 === 0) speedMultiplier += 0.1;
+            function gameOver() {
+                isPlaying = false;
+                cancelAnimationFrame(gameLoopId);
+                document.getElementById('gameOverlay').style.display = 'flex';
+                document.querySelector('#gameOverlay h2').innerText = "GAME OVER!";
+                const best = parseInt(localStorage.getItem('cyberBest') || 0);
+                if(gameScore > best) {
+                    localStorage.setItem('cyberBest', gameScore);
+                    document.getElementById('gameBest').innerText = gameScore;
+                }
+            }
 
-            // حرکت و رسم آیتم‌ها
-            for(let i = 0; i < items.length; i++) {
-                let p = items[i];
-                p.y += p.speed;
+            function gameLoop() {
+                if(!isPlaying) return;
+                gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
 
-                // رسم
+                // بازیکن
+                gCtx.fillStyle = '#00f3ff';
+                gCtx.shadowBlur = 15; gCtx.shadowColor = '#00f3ff';
                 gCtx.beginPath();
-                if(p.type === 'good') {
-                    gCtx.fillStyle = '#bc13fe'; // بنفش (استارز)
-                    gCtx.arc(p.x, p.y, p.size/2, 0, Math.PI*2);
-                    gCtx.fill();
-                } else {
-                    gCtx.fillStyle = '#ff0055'; // قرمز (ویروس)
-                    gCtx.rect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
-                    gCtx.fill();
-                }
+                gCtx.moveTo(playerX, 350);
+                gCtx.lineTo(playerX - 15, 390);
+                gCtx.lineTo(playerX + 15, 390);
+                gCtx.fill();
+                gCtx.shadowBlur = 0;
 
-                // برخورد
-                const dist = Math.sqrt(Math.pow(p.x - playerX, 2) + Math.pow(p.y - 370, 2));
-                if(dist < p.size + 10) {
-                    if(p.type === 'bad') {
-                        gameOver();
-                        return;
+                // آیتم‌ها
+                frameCount++;
+                if(frameCount % Math.floor(spawnRate / speedMultiplier) === 0) {
+                    const isBad = Math.random() > 0.7;
+                    items.push({
+                        x: Math.random() * (gCanvas.width - 20),
+                        y: -20,
+                        size: Math.random() * 10 + 15,
+                        speed: (Math.random() * 2 + 2) * speedMultiplier,
+                        type: isBad ? 'bad' : 'good'
+                    });
+                }
+                if(frameCount % 500 === 0) speedMultiplier += 0.1;
+
+                // منطق حرکت
+                for(let i = 0; i < items.length; i++) {
+                    let p = items[i];
+                    p.y += p.speed;
+                    gCtx.beginPath();
+                    if(p.type === 'good') {
+                        gCtx.fillStyle = '#bc13fe';
+                        gCtx.arc(p.x, p.y, p.size/2, 0, Math.PI*2);
+                        gCtx.fill();
                     } else {
-                        gameScore += 10;
-                        document.getElementById('gameScore').innerText = gameScore;
-                        items.splice(i, 1);
-                        i--;
-                        continue;
+                        gCtx.fillStyle = '#ff0055';
+                        gCtx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
                     }
-                }
 
-                // حذف اگر از صفحه خارج شد
-                if(p.y > 410) {
-                    items.splice(i, 1);
-                    i--;
-                }
-            }
-
-            gameLoopId = requestAnimationFrame(gameLoop);
-        }
-
-        // --- پس زمینه ذرات سایت ---
-        const bgCanvas = document.getElementById("bgCanvas");
-        const ctx = bgCanvas.getContext("2d");
-        let particlesArray;
-
-        function resizeBg() {
-            bgCanvas.width = window.innerWidth;
-            bgCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', () => { resizeBg(); initBgParticles(); });
-        resizeBg();
-
-        class Particle {
-            constructor(x, y, size, sX, sY) {
-                this.x = x; this.y = y; this.size = size; this.sX = sX; this.sY = sY;
-            }
-            update() {
- 
+                    const dist = Math.sqrt(Math.pow(p.x - playerX, 2) + Math.pow(p.y - 370, 2));
+                    if(dist < p.size + 10) {
+                        if(p.type === 'bad') {
+                            gameOver(); return;
+                        } else {
+                            gameScore += 10;
+                            document.getElementById('gameScore').innerText = gameScore;
+                            items.splice(i, 1); i-
