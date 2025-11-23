@@ -1,264 +1,405 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نکست کریپتو | خرید استارز و تون</title>
+    <title>تِل کوین | خرید ارز دیجیتال</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* تنظیمات رنگ‌ها و متغیرها */
         :root {
-            --bg-dark: #050505;
-            --primary: #24A1DE;
-            --secondary: #F5C347;
-            --accent: #8c52ff;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text: #ffffff;
-            --success: #00ff88;
+            --bg-color: #030305;
+            --card-bg: rgba(20, 20, 25, 0.6);
+            --text-main: #ffffff;
+            --text-sec: #aaaaaa;
+            --accent: #00f2ea; /* فیروزه‌ای نئونی */
+            --accent-glow: rgba(0, 242, 234, 0.5);
+            --primary: #4e4eff;
+            --border: rgba(255, 255, 255, 0.1);
+            --gradient: linear-gradient(135deg, #00f2ea 0%, #4e4eff 100%);
+            --grid-color: rgba(255, 255, 255, 0.03);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; scroll-behavior: smooth; }
+        /* حالت لایت مود */
+        [data-theme="light"] {
+            --bg-color: #f4f7f6;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-main: #1a1a2e;
+            --text-sec: #666666;
+            --accent: #246bfd;
+            --accent-glow: rgba(36, 107, 253, 0.3);
+            --primary: #6c5ce7;
+            --border: rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #246bfd 0%, #6c5ce7 100%);
+            --grid-color: rgba(0, 0, 0, 0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; transition: background 0.3s, color 0.3s; }
 
         body {
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 15% 50%, rgba(36, 161, 222, 0.1) 0%, transparent 25%),
-                              radial-gradient(circle at 85% 30%, rgba(140, 82, 255, 0.1) 0%, transparent 25%);
-            color: var(--text);
+            background-color: var(--bg-color);
+            color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* نوار وضعیت بالا */
-        .status-bar {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 8px 0;
-            font-size: 0.85rem;
-            color: #ccc;
+        /* پس‌زمینه شبکه‌ای متحرک */
+        .cyber-grid {
             position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            perspective: 500px;
+            transform-style: preserve-3d;
+            animation: moveGrid 20s linear infinite;
         }
 
-        .status-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        @keyframes moveGrid { 0% { background-position: 0 0; } 100% { background-position: 0 40px; } }
 
-        .live-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: var(--success);
+        /* دکمه تغییر تم */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            margin-left: 5px;
-            box-shadow: 0 0 10px var(--success);
-            animation: pulse 2s infinite;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 0 15px var(--accent-glow);
+            font-size: 1.2rem;
+            color: var(--text-main);
         }
 
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 80px 20px 20px 20px; }
+        /* نوار آمار */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-sec);
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .stat-item i { color: var(--accent); margin-left: 5px; }
 
         /* هدر */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; margin-bottom: 40px; }
-        .logo { font-size: 1.8rem; font-weight: 900; }
-        .logo span { color: var(--primary); }
-        .btn-contact { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; text-decoration: none; color: white; border: 1px solid var(--glass-border); transition: 0.3s; }
-        .btn-contact:hover { background: var(--primary); border-color: var(--primary); }
+        header { text-align: center; margin-bottom: 60px; position: relative; }
+        .logo { 
+            font-size: 3.5rem; 
+            font-weight: 900; 
+            background: var(--gradient); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .subtitle { color: var(--text-sec); font-size: 1.1rem; }
 
-        /* هیرو */
-        .hero { text-align: center; padding: 40px 0; }
-        .hero h1 { font-size: 3rem; margin-bottom: 15px; background: linear-gradient(to bottom, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { color: #888; margin-bottom: 40px; }
+        /* محصولات */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
 
-        /* گرید محصولات */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 80px; }
-        .card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px; position: relative; transition: 0.3s; overflow: hidden; }
-        .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.08); }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(12px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
+        }
+
+        .card h3 { font-size: 1.8rem; margin-bottom: 10px; }
+        .card p { color: var(--text-sec); margin-bottom: 20px; font-size: 0.9rem; }
         
-        .card-icon { font-size: 2.5rem; margin-bottom: 15px; }
-        .price-box { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin: 15px 0; }
-        .live-price { font-size: 1.4rem; font-weight: bold; color: var(--success); display: block; }
-        .live-price.loading { font-size: 1rem; color: #888; }
-        .usd-price { font-size: 0.8rem; color: #666; display: block; margin-top: 5px; }
+        .badge {
+            background: rgba(255, 50, 50, 0.1);
+            color: #ff4757;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
 
-        .btn-buy { display: block; width: 100%; padding: 15px; border-radius: 15px; background: var(--text); color: var(--bg-dark); text-align: center; text-decoration: none; font-weight: 800; transition: 0.3s; margin-top: 15px; }
-        .btn-buy:hover { background: var(--primary); color: white; }
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-action::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn-action:hover::before { left: 100%; }
 
-        /* فرم سفارش */
-        .order-section { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 30px; padding: 30px; max-width: 600px; margin: 0 auto 50px auto; }
-        .form-control { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: white; margin-bottom: 15px; outline: none; }
-        .form-control:focus { border-color: var(--primary); }
-        .btn-submit { background: linear-gradient(45deg, var(--primary), var(--accent)); color: white; border: none; width: 100%; padding: 18px; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        /* فرم سفارش پیشرفته */
+        .order-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(15px);
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .order-panel::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            z-index: -1;
+            border-radius: 26px;
+            background: var(--gradient);
+            opacity: 0.3;
+            filter: blur(10px);
+        }
 
-        @media (max-width: 768px) { .hero h1 { font-size: 2.2rem; } .status-bar { font-size: 0.7rem; } }
+        .input-group { margin-bottom: 20px; text-align: right; }
+        .input-group label { display: block; margin-bottom: 8px; color: var(--text-sec); font-size: 0.9rem; }
+        
+        .custom-input {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+        }
+        .custom-input:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            color: var(--text-sec);
+            font-size: 0.9rem;
+        }
+
+        .designer { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* پاپ آپ */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-color);
+            border: 1px solid var(--accent);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 2000;
+            white-space: nowrap;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="status-bar">
-        <div class="status-container">
-            <div>
-                <span class="live-indicator"></span>
-                <span id="online-users">...</span> نفر آنلاین
-            </div>
-            <div id="tehran-time">در حال دریافت ساعت...</div>
-        </div>
-    </div>
+    <div class="cyber-grid"></div>
+
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
 
     <div class="container">
-        <nav>
-            <div class="logo">نکست<span>کریپتو</span>.</div>
-            <a href="https://t.me/justfor_everyone" class="btn-contact"><i class="fab fa-telegram"></i> پشتیبانی</a>
-        </nav>
+        <div class="stats-bar">
+            <div class="stat-item"><i class="fas fa-globe"></i> وضعیت: آنلاین</div>
+            <div class="stat-item" id="time-display"><i class="far fa-clock"></i> ساعت: --:--</div>
+            <div class="stat-item"><i class="fas fa-users"></i> کاربران: <span id="users-count">32</span></div>
+        </div>
 
-        <section class="hero">
-            <h1>مرجع تخصصی خرید<br>استارز و ارزهای تلگرام</h1>
-            <p>قیمت‌ها هر ۶۰ ثانیه به صورت خودکار از صرافی‌های جهانی آپدیت می‌شوند.</p>
-        </section>
+        <header>
+            <div class="logo">NEXT<span style="color:var(--accent)">SHOP</span></div>
+            <p class="subtitle">نسل جدید خرید ارزهای تلگرام | بدون واسطه</p>
+        </header>
 
-        <div class="grid">
+        [attachment_0](attachment)
+
+        <div class="products-grid">
             <div class="card">
-                <div class="card-icon" style="color: var(--secondary);"><i class="fas fa-star"></i></div>
-                <h3>استارز تلگرام</h3>
-                <p>نرخ تقریبی هر عدد (بسته ۵۰ تایی)</p>
-                <div class="price-box">
-                    <span id="stars-price-toman" class="live-price loading">در حال محاسبه...</span>
-                    <span id="stars-price-usd" class="usd-price">~ $0.016 USD</span>
-                </div>
-                <a href="#" onclick="sendDirectMessage('خرید استارز')" class="btn-buy">خرید استارز</a>
+                <div class="card-icon"><i class="fas fa-star"></i></div>
+                <h3>Stars تلگرام</h3>
+                <span class="badge">تحویل فوری</span>
+                <p>مخصوص ربات‌ها و پرداخت‌های درون برنامه‌ای</p>
+                <button onclick="scrollToOrder('Stars')" class="btn-action">ثبت سفارش</button>
             </div>
 
             <div class="card">
-                <div class="card-icon" style="color: var(--primary);"><i class="fas fa-gem"></i></div>
-                <h3>تون کوین (TON)</h3>
-                <p>قیمت لحظه‌ای بازار جهانی</p>
-                <div class="price-box">
-                    <span id="ton-price-toman" class="live-price loading">در حال دریافت...</span>
-                    <span id="ton-price-usd" class="usd-price">Waiting for API...</span>
-                </div>
-                <a href="#" onclick="sendDirectMessage('خرید تون کوین')" class="btn-buy">خرید TON</a>
-            </div>
-
-            <div class="card">
-                <div class="card-icon" style="color: var(--accent);"><i class="fas fa-crown"></i></div>
-                <h3>تلگرام پرمیوم</h3>
-                <p>فعالسازی قانونی روی اکانت</p>
-                <div class="price-box">
-                    <span class="live-price">توافقی</span>
-                    <span class="usd-price">گیفت ۳ / ۶ / ۱۲ ماهه</span>
-                </div>
-                <a href="#" onclick="sendDirectMessage('خرید پرمیوم')" class="btn-buy">مشاهده پلن‌ها</a>
+                <div class="card-icon"><i class="fas fa-gem"></i></div>
+                <h3>TON Coin</h3>
+                <span class="badge">نرخ لحظه‌ای</span>
+                <p>به دلیل نوسان بازار، قیمت در پی‌وی نهایی می‌شود</p>
+                <button onclick="scrollToOrder('TON')" class="btn-action">ثبت سفارش</button>
             </div>
         </div>
 
-        <section id="order-form" class="order-section">
-            <h2 style="text-align: center; margin-bottom: 20px;">ثبت سفارش سریع</h2>
-            <form onsubmit="submitOrder(event)">
-                <select id="product" class="form-control" style="background: #111;">
-                    <option value="Stars">استارز (Telegram Stars)</option>
+        <section id="order-section" class="order-panel">
+            <h2 style="text-align: center; margin-bottom: 30px;">تکمیل سفارش</h2>
+            
+            <div class="input-group">
+                <label>نوع ارز</label>
+                <select id="order-type" class="custom-input" style="background: var(--bg-color);">
+                    <option value="Stars">استارز (Stars)</option>
                     <option value="TON">تون کوین (TON)</option>
-                    <option value="Premium">تلگرام پرمیوم</option>
                 </select>
-                <input type="text" id="amount" class="form-control" placeholder="تعداد یا مبلغ (مثلا: ۵۰۰ استارز)">
-                <input type="text" id="userid" class="form-control" placeholder="آیدی تلگرام شما">
-                <button type="submit" class="btn-submit">ارسال به تلگرام ادمین</button>
-            </form>
+            </div>
+
+            <div class="input-group">
+                <label>تعداد مورد نیاز</label>
+                <input type="text" id="order-amount" class="custom-input" placeholder="مثلا: 10 تون یا 500 استارز">
+            </div>
+
+            <div class="input-group">
+                <label>آیدی تلگرام شما (جهت تماس ما)</label>
+                <input type="text" id="user-id" class="custom-input" placeholder="@username" dir="ltr" style="text-align: left;">
+            </div>
+
+            <button onclick="submitOrder()" class="btn-action">دریافت کد رهگیری و ارسال</button>
         </section>
+
+        <footer>
+            <p>تمامی حقوق محفوظ است © 2025</p>
+            <p>DESIGNED BY <span class="designer">REZA</span></p>
+        </footer>
+    </div>
+
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle" style="color: var(--accent);"></i> کد سفارش شما کپی شد!
     </div>
 
     <script>
-        // تنظیمات ادمین
-        const ADMIN_ID = "justfor_everyone"; 
+        const ADMIN_ID = "justfor_everyone"; // آیدی خودت
 
-        // 1. نمایش ساعت تهران (ثانیه به ثانیه)
-        function updateTime() {
-            const now = new Date();
-            const options = { 
-                timeZone: 'Asia/Tehran', 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit',
-                hour12: false 
-            };
-            const timeString = now.toLocaleTimeString('fa-IR', options);
-            document.getElementById('tehran-time').innerHTML = `<i class="far fa-clock"></i> تهران: ${timeString}`;
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // 2. شبیه‌ساز کاربران آنلاین (بین 15 تا 45 نفر)
-        function updateOnlineUsers() {
-            const baseUsers = 25;
-            const randomFluctuation = Math.floor(Math.random() * 15) - 5; // تغییر کم
-            const total = baseUsers + randomFluctuation;
-            document.getElementById('online-users').innerText = total.toLocaleString('fa-IR');
-        }
-        setInterval(updateOnlineUsers, 5000); // آپدیت هر 5 ثانیه
-        updateOnlineUsers();
-
-        // 3. دریافت قیمت ارزها از API (کوین‌گکو)
-        async function fetchPrices() {
-            try {
-                // دریافت قیمت TON به دلار
-                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
-                const data = await response.json();
-                
-                const tonUsd = data['the-open-network'].usd;
-                
-                // فرض قیمت دلار (چون API رایگان تتر به تومان محدود است، اینجا قیمت حدودی تتر را 60,000 در نظر می‌گیریم یا دستی ست می‌کنیم)
-                // برای حرفه‌ای شدن، می‌توان قیمت تتر را دستی اینجا تغییر داد
-                const usdtToman = 69000; // قیمت فرضی تتر - این را می‌توانید تغییر دهید
-
-                // محاسبه قیمت تون
-                const tonToman = tonUsd * usdtToman;
-                
-                // محاسبه قیمت استارز (هر استار تقریبا 0.016 دلار است)
-                const starUsd = 0.0165; 
-                const starToman = starUsd * usdtToman;
-
-                // نمایش در سایت
-                document.getElementById('ton-price-usd').innerText = `$${tonUsd}`;
-                document.getElementById('ton-price-toman').innerText = Math.floor(tonToman).toLocaleString('fa-IR') + ' تومان';
-                
-                document.getElementById('stars-price-usd').innerText = `~$${starUsd}`;
-                document.getElementById('stars-price-toman').innerText = Math.floor(starToman).toLocaleString('fa-IR') + ' تومان';
-
-            } catch (error) {
-                console.error("Error fetching prices:", error);
-                document.getElementById('ton-price-toman').innerText = "خطا در دریافت";
+        // 1. تغییر تم (Dark/Light)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-sun';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-moon';
             }
         }
-        // قیمت‌ها را همین الان بگیر و هر 60 ثانیه آپدیت کن
-        fetchPrices();
-        setInterval(fetchPrices, 60000);
 
-        // 4. توابع ارسال پیام
-        function sendDirectMessage(text) {
-            const url = `https://t.me/${ADMIN_ID}?text=${encodeURIComponent('سلام، برای ' + text + ' مزاحم شدم.')}`;
-            window.open(url, '_blank');
+        // 2. اسکرول نرم به فرم
+        function scrollToOrder(type) {
+            document.getElementById('order-type').value = type;
+            document.getElementById('order-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function submitOrder(e) {
-            e.preventDefault();
-            const product = document.getElementById('product').value;
-            const amount = document.getElementById('amount').value;
-            const userid = document.getElementById('userid').value;
+        // 3. سیستم ثبت سفارش و تولید کد
+        function submitOrder() {
+            const type = document.getElementById('order-type').value;
+            const amount = document.getElementById('order-amount').value;
+            const user = document.getElementById('user-id').value;
 
-            if(!amount || !userid) { alert("لطفا همه فیلدها را پر کنید"); return; }
+            if (!amount || !user) {
+                alert("لطفا تعداد و آیدی خود را وارد کنید!");
+                return;
+            }
 
-            const msg = `🛒 *سفارش جدید سایت*\n\nمحصول: ${product}\nمقدار: ${amount}\nمشتری: ${userid}\n\nقیمت‌ها رو چک کردم، لطفا شماره کارت بدید.`;
-            window.open(`https://t.me/${ADMIN_ID}?text=${encodeURIComponent(msg)}`, '_blank');
+            // تولید کد سفارش رندوم و خفن
+            const orderID = '#ORD-' + Math.floor(Math.random() * 9000 + 1000);
+
+            // نمایش پیام کوتاه (Toast)
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+
+            // ساخت متن پیام برای ارسال به تلگرام
+            const message = `
+🚀 *سفارش جدید سایت* ---------------------------
+🆔 کد رهگیری: \`${orderID}\`
+💎 محصول: ${type}
+🔢 تعداد: ${amount}
+👤 کاربر: ${user}
+---------------------------
+لطفا قیمت نهایی و شماره کارت را ارسال کنید.
+            `;
+
+            // باز کردن تلگرام
+            setTimeout(() => {
+                const url = `https://t.me/${ADMIN_ID}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            }, 1000); // یک ثانیه تاخیر برای دیده شدن افکت
         }
+
+        // 4. ساعت زنده
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('time-display').innerHTML = 
+                `<i class="far fa-clock"></i> تهران: ${now.toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'})}`;
+        }, 1000);
+
+        // 5. تغییر تصادفی تعداد کاربران برای حس زنده بودن
+        setInterval(() => {
+            const count = Math.floor(Math.random() * (45 - 20) + 20);
+            document.getElementById('users-count').innerText = count.toLocaleString('fa-IR');
+        }, 8000);
+
     </script>
 </body>
 </html>
