@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اخبار انجمن | دانشگاه آزاد شوشتر</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* کپی استایل‌های اصلی برای هماهنگی */
+        :root { --bg: #0f172a; --surface: #1e293b; --primary: #3b82f6; --text: #f1f5f9; --border: rgba(255,255,255,0.1); }
+        body { background: var(--bg); color: var(--text); font-family: 'Vazirmatn', sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        .btn-back { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
+        
+        /* استایل خبرها */
+        .news-item { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 15px; margin-bottom: 20px; transition: 0.3s; }
+        .news-item:hover { transform: translateX(-5px); border-color: var(--primary); }
+        .date { font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 10px; }
+        .tag { background: rgba(59, 130, 246, 0.2); color: var(--primary); padding: 2px 10px; border-radius: 4px; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-right"></i> بازگشت به صفحه اصلی</a>
+        
+        <div class="header">
+            <h1>📢 تابلوی اعلانات و اخبار</h1>
+        </div>
+
+        <div class="news-item">
+            <span class="date"><i class="far fa-calendar"></i> ۱۰ آذر ۱۴۰۳</span>
+            <h2>کارگاه آموزش گیت و گیت‌هاب (Git & GitHub)</h2>
+            <p>این کارگاه مخصوص دانشجویان ترم ۱ و ۲ می‌باشد. همراه داشتن لپ‌تاپ الزامی است.</p>
+            <p>مدرس: مهندس رضایی</p>
+            <span class="tag">کارگاه عملی</span>
+        </div>
+
+        <div class="news-item">
+            <span class="date"><i class="far fa-calendar"></i> ۱۲ آذر ۱۴۰۳</span>
+            <h2>اطلاعیه لغو کلاس‌های استاد محمدی</h2>
+            <p>به اطلاع می‌رساند کلاس‌های ساختمان داده استاد محمدی در روز دوشنبه تشکیل نمی‌گردد.</p>
+            <span class="tag">اطلاعیه آموزشی</span>
+        </div>
+
+        <div class="news-item">
+            <span class="date"><i class="far fa-calendar"></i> ۱۵ آذر ۱۴۰۳</span>
+            <h2>فرخوان عضویت در تیم رباتیک</h2>
+            <p>انجمن علمی جهت تکمیل تیم رباتیک دانشگاه برای مسابقات ایران‌اופן عضو فعال می‌پذیرد.</p>
+            <span class="tag">فراخوان</span>
+        </div>
+
+    </div>
+</body>
+</html>
