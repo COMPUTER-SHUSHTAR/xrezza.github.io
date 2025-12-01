@@ -154,10 +154,10 @@
                 <i class="fas fa-code"></i> انجمن کامپیوتر <span style="font-weight:400; font-size:1rem;">شوشتر</span>
             </div>
             <ul class="nav-links">
-                <li><a href="#hero">خانه</a></li>
-                <li><a href="#roadmaps">رودمپ‌ها</a></li>
-                <li><a href="#news">اخبار و اطلاعیه‌ها</a></li>
-                <li><a href="#resources">جزوات درسی</a></li>
+                <li><a href="index.html" style="color:var(--primary);">خانه</a></li>
+                <li><a href="roadmaps.html">رودمپ‌ها</a></li>
+                <li><a href="news.html">اخبار و اطلاعیه‌ها</a></li>
+                <li><a href="resources.html">جزوات درسی</a></li>
             </ul>
             <a href="https://t.me/iau_shushtar_cs" target="_blank" class="btn btn-primary" style="padding: 8px 20px; font-size:0.9rem;">
                 <i class="fab fa-telegram-plane"></i> عضویت در کانال
@@ -165,7 +165,7 @@
         </div>
     </nav>
 
-    <section class="hero" id="hero">
+    <section class="hero">
         <div class="badge" style="background:rgba(139, 92, 246, 0.1); color:var(--secondary); padding:5px 15px; border-radius:50px; display:inline-block; margin-bottom:20px; border:1px solid rgba(139, 92, 246, 0.3);">
             👋 به جمع مهندسین آینده خوش آمدید
         </div>
@@ -175,68 +175,69 @@
             جدیدترین کارگاه‌ها، رودمپ‌های برنامه‌نویسی و اخبار گروه کامپیوتر را اینجا دنبال کنید.
         </p>
         <div style="display:flex; gap:15px; justify-content:center;">
-            <a href="#roadmaps" class="btn btn-primary">شروع یادگیری <i class="fas fa-arrow-left"></i></a>
-            <a href="#news" class="btn btn-outline">اخبار جدید</a>
+            <a href="roadmaps.html" class="btn btn-primary">شروع یادگیری <i class="fas fa-arrow-left"></i></a>
+            <a href="news.html" class="btn btn-outline">اخبار جدید</a>
         </div>
     </section>
 
-    
-
-    <div class="container" id="roadmaps">
+    <div class="container">
         <h2 class="section-title">مسیرهای یادگیری (Roadmaps)</h2>
         <div class="grid">
-            <div class="card">
+            <div class="card" onclick="window.location.href='roadmaps.html'" style="cursor: pointer;">
                 <div class="card-icon" style="color:#f59e0b;"><i class="fab fa-html5"></i></div>
                 <h3>توسعه وب (Frontend)</h3>
-                <p>مسیر کامل یادگیری طراحی وب از HTML/CSS تا React و Next.js. مناسب برای شروع برنامه‌نویسی.</p>
+                <p>مسیر کامل یادگیری طراحی وب از HTML/CSS تا React. کلیک کنید تا جزئیات را ببینید.</p>
                 <span class="tag">HTML</span> <span class="tag">CSS</span> <span class="tag">React</span>
             </div>
-            <div class="card">
+            <div class="card" onclick="window.location.href='roadmaps.html'" style="cursor: pointer;">
                 <div class="card-icon" style="color:#10b981;"><i class="fas fa-server"></i></div>
                 <h3>توسعه سرور (Backend)</h3>
                 <p>یادگیری منطق سرور، دیتابیس‌ها و API نویسی با زبان‌های Python یا Node.js.</p>
                 <span class="tag">Python</span> <span class="tag">Django</span> <span class="tag">SQL</span>
             </div>
-            <div class="card">
+            <div class="card" onclick="window.location.href='roadmaps.html'" style="cursor: pointer;">
                 <div class="card-icon" style="color:#8b5cf6;"><i class="fas fa-brain"></i></div>
                 <h3>هوش مصنوعی (AI)</h3>
                 <p>ورود به دنیای داده‌ها، یادگیری ماشین و شبکه‌های عصبی. آینده تکنولوژی اینجاست.</p>
                 <span class="tag">Machine Learning</span> <span class="tag">Python</span>
             </div>
         </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="roadmaps.html" style="color: var(--primary); text-decoration: none;">مشاهده کامل رودمپ‌ها &larr;</a>
+        </div>
     </div>
 
-    <div class="container" id="news" style="background:var(--surface); border-radius:30px; width:100%;">
+    <div class="container" style="background:var(--surface); border-radius:30px; width:100%; margin-top: 50px;">
         <h2 class="section-title">آخرین اطلاعیه‌ها</h2>
         <div class="grid">
             <div class="card" style="background:var(--bg);">
                 <span style="color:var(--text-muted); font-size:0.8rem;"><i class="far fa-calendar"></i> ۱۰ آذر ۱۴۰۳</span>
                 <h3 style="margin-top:10px;">کارگاه آموزش گیت و گیت‌هاب</h3>
-                <p>برگزاری کارگاه عملی Git برای دانشجویان ورودی جدید. مکان: سایت کامپیوتر دانشکده فنی.</p>
-                <a href="#" style="color:var(--primary); text-decoration:none; margin-top:15px; display:block;">ثبت‌نام کنید &larr;</a>
+                <p>برگزاری کارگاه عملی Git برای دانشجویان ورودی جدید.</p>
+                <a href="news.html" style="color:var(--primary); text-decoration:none; margin-top:15px; display:block;">جزئیات بیشتر &larr;</a>
             </div>
             <div class="card" style="background:var(--bg);">
                 <span style="color:var(--text-muted); font-size:0.8rem;"><i class="far fa-calendar"></i> ۱۲ آذر ۱۴۰۳</span>
                 <h3 style="margin-top:10px;">سمینار امنیت سایبری</h3>
-                <p>آشنایی با متدهای جدید نفوذ و امنیت با حضور اساتید گروه کامپیوتر.</p>
-                <a href="#" style="color:var(--primary); text-decoration:none; margin-top:15px; display:block;">جزئیات بیشتر &larr;</a>
+                <p>آشنایی با متدهای جدید نفوذ و امنیت با حضور اساتید.</p>
+                <a href="news.html" style="color:var(--primary); text-decoration:none; margin-top:15px; display:block;">جزئیات بیشتر &larr;</a>
             </div>
             <div class="card" style="background:var(--bg);">
                 <span style="color:var(--text-muted); font-size:0.8rem;"><i class="far fa-calendar"></i> ۱۵ آذر ۱۴۰۳</span>
                 <h3 style="margin-top:10px;">انتخاب واحد ترم جدید</h3>
-                <p>نکات مهم در مورد پیش‌نیازها و چارت درسی ورودی‌های ۱۴۰۰ به بعد.</p>
-                <a href="#" style="color:var(--primary); text-decoration:none; margin-top:15px; display:block;">مشاهده چارت &larr;</a>
+                <p>نکات مهم در مورد پیش‌نیازها و چارت درسی.</p>
+                <a href="news.html" style="color:var(--primary); text-decoration:none; margin-top:15px; display:block;">جزئیات بیشتر &larr;</a>
             </div>
         </div>
     </div>
 
-    <div class="container" id="resources">
+    <div class="container" style="margin-top: 50px;">
         <h2 class="section-title">جعبه ابزار دانشجو</h2>
         <div style="text-align:center; padding:40px; border:2px dashed var(--border); border-radius:20px;">
             <i class="fas fa-cloud-download-alt" style="font-size:3rem; color:var(--text-muted); margin-bottom:20px;"></i>
             <h3>بانک نمونه سوالات و جزوات</h3>
             <p style="margin-bottom:20px; color:var(--text-muted);">دسترسی به آرشیو کامل جزوات اساتید دانشگاه آزاد شوشتر</p>
-            <button class="btn btn-outline">ورود به مخزن فایل‌ها</button>
+            <a href="resources.html" class="btn btn-outline">ورود به مخزن فایل‌ها</a>
         </div>
     </div>
 
@@ -263,7 +264,7 @@
     </button>
 
     <script>
-        // 1. تایپ خودکار متن (Typewriter Effect)
+        // 1. تایپ خودکار
         const texts = ["شوشتــر", "واحد شوشتــر"];
         let count = 0;
         let index = 0;
@@ -279,13 +280,13 @@
             if (letter.length === currentText.length) {
                 count++;
                 index = 0;
-                setTimeout(type, 2000); // مکث بعد از تکمیل کلمه
+                setTimeout(type, 2000);
             } else {
-                setTimeout(type, 150); // سرعت تایپ
+                setTimeout(type, 150);
             }
         }());
 
-        // 2. تغییر تم (Dark/Light)
+        // 2. تغییر تم
         function toggleTheme() {
             const html = document.documentElement;
             const current = html.getAttribute('data-theme');
@@ -296,27 +297,29 @@
             icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
         }
 
-        // 3. پس زمینه ماتریکسی (Matrix Background)
+        // 3. پس زمینه ماتریکسی
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
 
-        const binary = "10"; // فقط صفر و یک برای حس کامپیوتری
+        const binary = "10"; 
         const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        const drops = [];
+        let columns = canvas.width / fontSize;
+        let drops = [];
 
         for(let x = 0; x < columns; x++) drops[x] = 1;
 
         function draw() {
-            // رنگ پس‌زمینه با شفافیت کم برای ایجاد رد محو
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             ctx.fillStyle = isDark ? "rgba(15, 23, 42, 0.05)" : "rgba(248, 250, 252, 0.05)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = isDark ? "#0f0" : "#2563eb"; // سبز هکری یا آبی
+            ctx.fillStyle = isDark ? "#0f0" : "#2563eb"; 
             ctx.font = fontSize + "px monospace";
 
             for(let i = 0; i < drops.length; i++) {
@@ -332,8 +335,10 @@
         setInterval(draw, 33);
 
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            resizeCanvas();
+            columns = canvas.width / fontSize;
+            drops = [];
+            for(let x = 0; x < columns; x++) drops[x] = 1;
         });
     </script>
 </body>
